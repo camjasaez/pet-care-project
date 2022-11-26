@@ -17,11 +17,6 @@ const petSchema = new Schema({
     type: String,
     required: true,
   },
-  photo: {
-    type: String,
-    required: true,
-    unique: true,
-  },
 });
 
 module.exports = model('Pet', petSchema);
