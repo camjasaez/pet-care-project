@@ -25,7 +25,6 @@ async function getPets(req, res) {
 /**
  * @name createPet
  * @description Create a new pet
- * @description Get all pets
  * @param {Object} req request for POST method to create a new pet
  * @param {Object} res response for POST method to create a new pet
  */
