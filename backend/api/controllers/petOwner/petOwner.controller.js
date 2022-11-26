@@ -11,7 +11,7 @@ const { petOwnerSchema, getOwnerId } = require('../../schemas/petOwner.schema');
  */
 async function getPetOwners(req, res) {
   try {
-    const petOwners = await PetOwnerModel.find();
+    const petOwners = await PetOwnerModel.find().populate('pets');
     const statusCode = petOwners.length === 0 ? 204 : 200;
     sucessResponse(req, res, 'Pet Owners', petOwners, statusCode);
   } catch (error) {
@@ -22,21 +22,20 @@ async function getPetOwners(req, res) {
 /**
  * @name getPetOwnerById
  * @description Get a pet owner by id
- * @param {Object} req - Request object 
+ * @param {Object} req - Request object
  * @param {object} res - Response object
  */
 async function getPetOwnerById(req, res) {
   try {
     const petOwner = await PetOwnerModel.findById({
       _id: req.params.id,
-    });
+    }).populate('pets');
     const statusCode = petOwner.length === 0 ? 204 : 200;
     sucessResponse(req, res, 'Pet Owner', petOwner, statusCode);
   } catch (error) {
     errorResponse(req, res, 'Pet owner not found', 404);
   }
 }
-
 
 /**
  * @name createPetOwner

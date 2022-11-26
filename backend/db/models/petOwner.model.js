@@ -29,7 +29,12 @@ const petOwnerSchema = new Schema({
     required: true,
     unique: true,
   },
-
+  pets: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Pet',
+    },
+  ],
 });
 
 module.exports = model('PetOwner', petOwnerSchema);
