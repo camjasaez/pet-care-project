@@ -14,16 +14,9 @@ const careSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  pets: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Pet',
-      unique: true,
-    },
-  ],
-  careTaker: {
+  pet: {
     type: Schema.Types.ObjectId,
-    ref: 'CareTaker',
+    ref: 'Pet',
   },
 });
 

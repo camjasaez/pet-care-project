@@ -1,21 +1,19 @@
 const Joi = require('joi');
 
 const id = Joi.string().required();
-const entryDate = Joi.date();
-const exitDate = Joi.date().default(null);
-const withdrawn = Joi.boolean().default(false);
-const pets = Joi.array().items(Joi.string());
-const careTaker = Joi.string().required();
+const withdrawn = Joi.boolean().default(false).required();
+const pet = Joi.string().required();
 
 const careSchema = Joi.object({
-  entryDate,
-  exitDate,
-  withdrawn,
-  pets,
+  pet,
 });
 
 const careId = Joi.object({
   id,
 });
 
-module.exports = { careSchema, careId };
+const careWithdrawPetSchema = Joi.object({
+  withdrawn,
+});
+
+module.exports = { careSchema, careId, careWithdrawPetSchema };
