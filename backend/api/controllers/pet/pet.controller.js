@@ -65,6 +65,7 @@ async function createPet(req, res) {
 async function getPet(req, res) {
   try {
     const pet = await Pet.findById(req.params.id);
+    console.log(pet);
     const statusCode = pet.length === 0 ? 200 : 404;
     sucessResponse(req, res, 'Pet found', pet, statusCode);
   } catch (error) {

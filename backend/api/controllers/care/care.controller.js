@@ -9,7 +9,7 @@ const { sucessResponse, errorResponse } = require('../../../utils/responses');
 
 async function getCare(req, res) {
   try {
-    const cares = await CareModel.find();
+    const cares = await CareModel.find().populate('pets').populate('careTaker');
     const statusCode = cares.length === 0 ? 204 : 200;
     sucessResponse(req, res, 'Care', cares, statusCode);
   } catch (error) {
@@ -20,20 +20,22 @@ async function getCare(req, res) {
 
 async function createCare(req, res) {
   try {
-    const mybody = {
-      careTaker: req.params.idCareTaker,
-      pet: req.params.idPet,
-      ...req.body,
-    };
+    const myCareTaker = await CareTakerModel.findById(req.params.idCareTaker);
+    if (!myCareTaker) {
+      throw new Error('Care Taker not found');
+    }
 
-    const { error } = careSchema.validate(mybody);
+    const { error } = careSchema.validate(req.body);
     if (error) {
       errorResponse(req, res, `Care => ${error} `, 400);
       return;
     }
 
-    const care = new CareModel(mybody);
+    const care = new CareModel(req.body);
     const newCare = await care.save();
+
+    care.careTaker = myCareTaker;
+    await care.save();
 
     if (!newCare) {
       throw new Error('Care has not been added');
@@ -41,8 +43,18 @@ async function createCare(req, res) {
 
     sucessResponse(req, res, 'Care Created', newCare, 201);
   } catch (error) {
+    console.log(error);
     errorResponse(req, res, 'Care has not been added', 500);
   }
 }
+
+// async function addPets(req,res){
+//   try {
+
+//   } catch (error) {
+
+//   }
+
+// }
 
 module.exports = { getCare, createCare };

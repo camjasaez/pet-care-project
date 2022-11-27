@@ -14,18 +14,16 @@ const careSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  pet: [
+  pets: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Pet',
-      required: true,
+      unique: true,
     },
   ],
   careTaker: {
     type: Schema.Types.ObjectId,
     ref: 'CareTaker',
-    required: true,
-    unique: true,
   },
 });
 

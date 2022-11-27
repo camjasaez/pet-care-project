@@ -6,6 +6,6 @@ const router = Router();
 const care = require('../../controllers/care/care.controller');
 
 router.get('/', care.getCare);
-router.post('/:idCareTaker/:idPet', care.createCare);
+router.post('/:idCareTaker', care.createCare);
 
 module.exports = router;
