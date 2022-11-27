@@ -36,19 +36,27 @@ async function createPet(req, res) {
       errorResponse(req, res, `Pet => ${error} `, 400);
       return;
     }
+
+    const { error: paramsError } = petId.validate(req.params);
+    if (paramsError) {
+      errorResponse(req, res, `Pet params=> ${paramsError} `, 400);
+      return;
+    }
+
     const pet = new Pet(req.body);
     const newPet = await pet.save();
+    console.log(newPet);
+    if (!newPet) {
+      throw new Error('Pet x has not been added');
+    }
 
-    const petOwner = await PetOwnerModel.findById(req.params.idownerPet);
+    const petOwner = await PetOwnerModel.findById(req.params.id);
     if (!petOwner) {
       throw new Error('Pet Owner not found');
     }
     petOwner.pets.push(newPet);
     await petOwner.save();
 
-    if (!newPet) {
-      throw new Error('Pet has not been added');
-    }
     sucessResponse(req, res, 'Pet Created', pet, 201);
   } catch (error) {
     errorResponse(req, res, 'Pet has not been added', 500);
@@ -65,6 +73,7 @@ async function createPet(req, res) {
 async function getPet(req, res) {
   try {
     const pet = await Pet.findById(req.params.id);
+    console.log(pet);
     const statusCode = pet.length === 0 ? 200 : 404;
     sucessResponse(req, res, 'Pet found', pet, statusCode);
   } catch (error) {
