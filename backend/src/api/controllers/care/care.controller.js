@@ -190,17 +190,6 @@ async function withdrawPet(req, res) {
       return;
     }
 
-    //Ejemplos de envio de email.
-    const petOwner1 = {
-      petOwnerEmail: 'petOwner1@gmail.com',
-      petOwnerName: 'John Doe',
-    };
-
-    const petSitter1 = {
-      petSitterEmail: 'petSitter@gmail.com',
-      petSitterName: 'Pedro Perez',
-    };
-
     await sendEmail(
       petOwner1,
       petSitter1,
