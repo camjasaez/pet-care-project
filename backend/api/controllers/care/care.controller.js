@@ -6,7 +6,11 @@ const {
   careSchema,
   careId,
   careWithdrawPetSchema,
+  ratingId,
 } = require('../../schemas/care.schema');
+
+const RatingModel = require('../../../db/models/rating.model');
+
 const { sucessResponse, errorResponse } = require('../../../utils/responses');
 
 /**
@@ -17,11 +21,11 @@ const { sucessResponse, errorResponse } = require('../../../utils/responses');
  */
 async function getCare(req, res) {
   try {
-    const cares = await CareModel.find().populate('pet');
+    const cares = await CareModel.find().populate('pet').populate('rating');
 
     const statusCode = cares.length === 0 ? 204 : 200;
 
-    sucessResponse(req, res, 'Care', cares, statusCode);
+    sucessResponse(req, res, 'Cares', cares, statusCode);
   } catch (error) {
     console.log(error);
     errorResponse(req, res, 'Error to get the cares', 500);
@@ -43,9 +47,9 @@ async function getCareById(req, res) {
       return;
     }
 
-    const care = await CareModel.findById({ _id: req.params.id }).populate(
-      'pet',
-    );
+    const care = await CareModel.findById({ _id: req.params.id })
+      .populate('pet')
+      .populate('rating');
 
     if (!care) {
       errorResponse(req, res, 'Care not found', 404);
@@ -174,4 +178,49 @@ async function withdrawPet(req, res) {
   }
 }
 
-module.exports = { getCare, createCare, deleteCare, withdrawPet, getCareById };
+/**
+ * @name addRating
+ * @description Add a rating to a care
+ * @param {Object} req Request object
+ * @param {Object} res Response object
+ */
+async function addRating(req, res) {
+  try {
+    const { error: errorParams } = ratingId.validate(req.params);
+    if (errorParams) {
+      errorResponse(req, res, `Care params => ${errorParams} `, 400);
+      return;
+    }
+
+    const myRating = await RatingModel.findById({ _id: req.params.idRating });
+
+    if (!myRating) {
+      errorResponse(req, res, 'Rating not found', 404);
+      return;
+    }
+
+    const care = await CareModel.findByIdAndUpdate(
+      { _id: req.params.idCare },
+      { rating: myRating },
+    );
+
+    if (!care) {
+      errorResponse(req, res, 'The rating has not been added', 500);
+      return;
+    }
+
+    sucessResponse(req, res, 'Rating added', care, 200);
+  } catch (error) {
+    console.log(error);
+    errorResponse(req, res, 'Error when trying to add a rating', 500);
+  }
+}
+
+module.exports = {
+  getCare,
+  createCare,
+  deleteCare,
+  withdrawPet,
+  getCareById,
+  addRating,
+};

@@ -16,4 +16,14 @@ const careWithdrawPetSchema = Joi.object({
   withdrawn,
 });
 
-module.exports = { careSchema, careId, careWithdrawPetSchema };
+const ratingId = Joi.object({
+  idCare: id,
+  idRating: id,
+});
+
+module.exports = {
+  careSchema,
+  careId,
+  careWithdrawPetSchema,
+  ratingId,
+};

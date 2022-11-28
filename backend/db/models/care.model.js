@@ -18,6 +18,11 @@ const careSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Pet',
   },
+  rating: {
+    type: Schema.Types.ObjectId,
+    ref: 'Rating',
+    default: null,
+  },
 });
 
 module.exports = model('Care', careSchema);
