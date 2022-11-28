@@ -10,5 +10,6 @@ router.get('/:id', care.getCareById);
 router.post('/', care.createCare);
 router.delete('/:id', care.deleteCare);
 router.patch('/:id', care.withdrawPet);
+router.patch('/:idCare/rating/:idRating', care.addRating);
 
 module.exports = router;
