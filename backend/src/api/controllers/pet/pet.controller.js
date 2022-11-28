@@ -43,17 +43,17 @@ async function createPet(req, res) {
       return;
     }
 
-    const pet = new Pet(req.body);
-    const newPet = await pet.save();
-    console.log(newPet);
-    if (!newPet) {
-      throw new Error('Pet x has not been added');
-    }
-
     const petOwner = await PetOwnerModel.findById(req.params.id);
     if (!petOwner) {
       throw new Error('Pet Owner not found');
     }
+
+    const pet = new Pet(req.body);
+    const newPet = await pet.save();
+    if (!newPet) {
+      throw new Error('Pet x has not been added');
+    }
+
     petOwner.pets.push(newPet);
     await petOwner.save();
 
