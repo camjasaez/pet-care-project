@@ -1,6 +1,7 @@
 'use strict';
 
 const CareModel = require('../../../db/models/care.model');
+const sendEmail = require('../../../utils/email');
 
 const {
   careSchema,
@@ -84,6 +85,24 @@ async function createCare(req, res) {
       errorResponse(req, res, 'The new care has not been added', 500);
       return;
     }
+
+    //Ejemplos de envio de email.
+    const petOwner1 = {
+      petOwnerEmail: 'petOwner1@gmail.com',
+      petOwnerName: 'John Doe',
+    };
+
+    const petSitter1 = {
+      petSitterEmail: 'petSitter@gmail.com',
+      petSitterName: 'Pedro Perez',
+    };
+
+    await sendEmail(
+      petOwner1,
+      petSitter1,
+      'Notificacion de cuidado',
+      'Se ha ingresado su mascota a un cuidado',
+    );
 
     sucessResponse(req, res, 'Care Created', newCare, 201);
   } catch (error) {
@@ -170,6 +189,13 @@ async function withdrawPet(req, res) {
       );
       return;
     }
+
+    await sendEmail(
+      petOwner1,
+      petSitter1,
+      'Notificacion de cuidado',
+      'Se ha ingresado su mascota a un cuidado',
+    );
 
     sucessResponse(req, res, 'Pet retirated', care, 200);
   } catch (error) {
