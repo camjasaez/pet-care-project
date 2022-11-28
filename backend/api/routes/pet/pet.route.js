@@ -5,7 +5,7 @@ const router = Router();
 
 const pet = require('../../controllers/pet/pet.controller');
 
-router.route('/').get(pet.getPets).post(pet.createPet);
+router.route('/').get(pet.getPets);
 
 router.route('/:id').post(pet.createPet);
 
