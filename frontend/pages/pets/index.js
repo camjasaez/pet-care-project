@@ -1,13 +1,47 @@
-import { Card, CardHeader, CardBody, CardFoote, Text } from '@chakra-ui/react';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from '@chakra-ui/react';
+import { getPets } from '../../utils/data/petData';
 
-function Pet({ pet }) {
+function Pet({ data }) {
   return (
-    <Card>
-      <CardBody>
-        <Text>Pagina de Pet</Text>
-      </CardBody>
-    </Card>
+    <TableContainer>
+      <Table variant="simple">
+        <Thead>
+          <Tr>
+            <Th>Nombre</Th>
+            <Th>Animal</Th>
+            <Th>Raza</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {data.map((pet) => (
+            <Tr key={pet._id}>
+              <Td>{pet.name}</Td>
+              <Td>{pet.animal}</Td>
+              <Td>{pet.breed}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </TableContainer>
   );
+}
+
+export async function getServerSideProps() {
+  const data = await getPets();
+
+  return {
+    props: { data },
+  };
 }
 
 export default Pet;
