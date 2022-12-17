@@ -45,8 +45,8 @@ function Takecare({ data: takecare }) {
                 </Tr>
               </Thead>
               <Tbody>
-                {takecare?.map(({ careTaker, cares }) => (
-                  <Tr key={careTaker._id}>
+                {takecare?.map(({ careTaker, cares, _id }) => (
+                  <Tr key={_id}>
                     <Td>{careTaker.name}</Td>
                     <Td>{careTaker.number}</Td>
                     <Td>{careTotalActives(cares)}</Td>

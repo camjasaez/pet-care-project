@@ -7,6 +7,7 @@ export async function getTakeCares() {
       const { data } = await res.json();
       return data;
     }
+    return [];
   } catch (error) {
     console.log(error);
   }
