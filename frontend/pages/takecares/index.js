@@ -14,21 +14,25 @@ import {
   TableCaption,
   TableContainer,
   Flex,
+  Button,
 } from '@chakra-ui/react';
 import { getTakeCares } from '../../utils/getTakeCaresData';
-
+import { useState } from 'react';
+import DetailsButton from '../../components/pagesComponents/takecares/DetailsButton';
+import { useRouter } from 'next/router';
 function Takecare({ data: takecare }) {
-  console.log(takecare);
+  const [activeCares, setActiveCares] = useState(0);
 
-  const careTotalActives = (cares) => {
-    console.log('cares', cares);
-    return cares.filter(({ withdrawn }) => withdrawn).length || 0;
-  };
-
+  const careTotalActives = (cares) =>
+    cares.filter(({ withdrawn }) => withdrawn).length;
+  const router = useRouter();
   return (
     <Card>
       <CardBody>
         <Text>Pagina de Takecare</Text>
+        <Button onClick={() => router.push('/takecares/cares')}>
+          Añadir cuidado
+        </Button>
         <Flex alignItems="center" justifyContent="center">
           <TableContainer>
             <Table variant="simple">
@@ -36,7 +40,7 @@ function Takecare({ data: takecare }) {
               <Thead>
                 <Tr>
                   <Th>Nombre</Th>
-                  <Th>into</Th>
+                  <Th>Numero</Th>
                   <Th>Cuidados activos</Th>
                 </Tr>
               </Thead>
@@ -45,8 +49,10 @@ function Takecare({ data: takecare }) {
                   <Tr key={careTaker._id}>
                     <Td>{careTaker.name}</Td>
                     <Td>{careTaker.number}</Td>
-                    <Td>{cares.length}</Td>
-                    {/*//!Mejorar esto, debe ser el largo de solo los activos */}
+                    <Td>{careTotalActives(cares)}</Td>
+                    <Td>
+                      <DetailsButton />
+                    </Td>
                   </Tr>
                 ))}
               </Tbody>
@@ -61,7 +67,7 @@ function Takecare({ data: takecare }) {
 export default Takecare;
 
 export async function getServerSideProps() {
-  const { data } = await getTakeCares();
+  const data = await getTakeCares();
 
   return {
     props: { data },

@@ -7,7 +7,7 @@ const links = [
   { href: '/caretakers', label: 'Caretaker' },
   { href: '/petowners', label: 'Pet Owner' },
   { href: '/pets', label: 'Pet' },
-  { href: '/cares', label: 'Care' },
+  // { href: '/cares', label: 'Care' },
   { href: '/ratings', label: 'Rating' },
   { href: '/takecares', label: 'Take Care' },
 ];

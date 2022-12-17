@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import CardItem from '../components/pagesComponents/index/CardItem';
 import { getTakeCares } from '../utils/getTakeCaresData';
+
 export default function Home({ data: number }) {
   const totalNumber = number.length || 0;
   console.log(number);
@@ -48,8 +49,7 @@ export default function Home({ data: number }) {
 }
 
 export async function getServerSideProps() {
-  const { data } = await getTakeCares();
-
+  const data = await getTakeCares();
   return {
     props: { data },
   };
