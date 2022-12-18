@@ -18,14 +18,27 @@ import {
   ModalCloseButton,
   useDisclosure,
   Input,
+  Select,
   FormControl,
-  resolveStyleConfig,
 } from '@chakra-ui/react';
+import {
+  MdDone,
+  MdOutlineClose,
+  MdOutlineAdd,
+  MdOutlineCreate,
+  MdOutlineRemove,
+} from 'react-icons/md';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { getPets, createPet, deletePet } from '../../utils/data/petData';
+import {
+  getPets,
+  createPet,
+  deletePet,
+  getPetOwner,
+  updatePet,
+} from '../../utils/data/petData';
 
-function Pet({ data }) {
+function Pet({ data, owners }) {
   const {
     register,
     handleSubmit,
@@ -35,24 +48,160 @@ function Pet({ data }) {
   const router = useRouter();
 
   const onSubmit = (data) => {
-    createPet(data);
+    const petData = {
+      name: data.name,
+      animal: data.animal,
+      breed: data.breed,
+      description: data.description,
+    };
+
+    createPet(petData, data.ownerId);
     router.replace(router.asPath);
   };
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isAddOpen,
+    onOpen: onAddOpen,
+    onClose: onAddClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
 
   return (
     <TableContainer>
       {/* Boton para agregar */}
-      <Button onClick={onOpen} type="reset">
+      <Button leftIcon={<MdOutlineAdd />} onClick={onAddOpen} type="reset">
         Agregar Mascota
       </Button>
 
       {/* Modal para agregar */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal isOpen={isAddOpen} onClose={onAddClose} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Agregar mascota</ModalHeader>
+          <ModalCloseButton />
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+            <ModalBody>
+              <FormControl mt={4} isRequired>
+                <Text fontWeight="bold" mb="1rem">
+                  Dueño
+                </Text>
+                <Select
+                  placeholder="Selecciona al Dueño"
+                  {...register('ownerId')}
+                >
+                  {owners.map((owner) => (
+                    <option key={owner._id} value={owner._id}>
+                      {owner.name}
+                    </option>
+                  ))}
+                </Select>
+                <Text fontWeight="bold" mb="1rem">
+                  Nombre
+                </Text>
+                <Input placeholder="Nombre" {...register('name')} />
+              </FormControl>
+              <FormControl mt={4} isRequired>
+                <Text fontWeight="bold" mb="1rem">
+                  Animal
+                </Text>
+                <Input placeholder="Animal" {...register('animal')} />
+              </FormControl>
+              <FormControl mt={4} isRequired>
+                <Text fontWeight="bold" mb="1rem">
+                  Raza
+                </Text>
+                <Input placeholder="Raza" {...register('breed')} />
+              </FormControl>
+              <FormControl mt={4} isRequired>
+                <Text fontWeight="bold" mb="1rem">
+                  Descripción
+                </Text>
+                <Input placeholder="Descripción" {...register('description')} />
+              </FormControl>
+            </ModalBody>
+
+            <ModalFooter>
+              <Tooltip label="Aceptar">
+                <Button
+                  colorScheme="green"
+                  mr={3}
+                  type="submit"
+                  onClick={() => onAddClose() && router.replace(router.asPath)}
+                  isLoading={isSubmitting}
+                  leftIcon={<MdDone />}
+                >
+                  Agregar
+                </Button>
+              </Tooltip>
+              <Tooltip label="Cancelar">
+                <Button
+                  colorScheme="red"
+                  mr={3}
+                  onClick={() => onAddClose()}
+                  type="reset"
+                  leftIcon={<MdOutlineClose />}
+                >
+                  Cancelar
+                </Button>
+              </Tooltip>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
+
+      {/* tabla */}
+      <Table variant="simple">
+        <Thead>
+          <Tr>
+            <Th>Nombre</Th>
+            <Th>Animal</Th>
+            <Th>Raza</Th>
+            <Th>Descripción</Th>
+            <Th>Botones</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {data.map((pet) => (
+            <Tr key={pet._id}>
+              <Td>{pet.name}</Td>
+              <Td>{pet.animal}</Td>
+              <Td>{pet.breed}</Td>
+              <Td> {pet.description}</Td>
+              <Td>
+                <Button
+                  colorScheme="red"
+                  onClick={() =>
+                    deletePet(pet._id) && router.replace(router.asPath)
+                  }
+                  leftIcon={<MdOutlineRemove />}
+                  type="submit"
+                >
+                  Eliminar
+                </Button>
+                <Button
+                  leftIcon={<MdOutlineCreate />}
+                  colorScheme="green"
+                  onClick={onEditOpen}
+                  type="reset"
+                >
+                  Editar
+                </Button>
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+
+      {/* Modal para editar */}
+      <Modal isOpen={isEditOpen} onClose={onEditClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Editar mascota</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <ModalBody>
@@ -88,65 +237,38 @@ function Pet({ data }) {
                   colorScheme="green"
                   mr={3}
                   type="submit"
-                  onClick={onClose}
+                  onClick={() => onEditClose() && router.replace(router.asPath)}
                   isLoading={isSubmitting}
+                  leftIcon={<MdDone />}
                 >
-                  Agregar
+                  Editar
                 </Button>
               </Tooltip>
               <Tooltip label="Cancelar">
-                <Button colorScheme="red" mr={3} onClick={onClose}>
+                <Button
+                  colorScheme="red"
+                  mr={3}
+                  onClick={() => onEditClose()}
+                  type="reset"
+                  leftIcon={<MdOutlineClose />}
+                >
                   Cancelar
                 </Button>
               </Tooltip>
-              <Button colorScheme="red" mr={3} type="reset">
-                Borrar
-              </Button>
             </ModalFooter>
           </form>
         </ModalContent>
       </Modal>
-
-      {/* tabla */}
-      <Table variant="simple">
-        <Thead>
-          <Tr>
-            <Th>Nombre</Th>
-            <Th>Animal</Th>
-            <Th>Raza</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data.map((pet) => (
-            <Tr key={pet._id}>
-              <Td>{pet.name}</Td>
-              <Td>{pet.animal}</Td>
-              <Td>{pet.breed}</Td>
-              <Td> {pet.description}</Td>
-              <Td>
-                <Button
-                  colorScheme="red"
-                  onClick={() =>
-                    deletePet(pet._id) && router.replace(router.asPath)
-                  }
-                  type="submit"
-                >
-                  Eliminar
-                </Button>
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
     </TableContainer>
   );
 }
 
 export async function getServerSideProps() {
   const data = await getPets();
+  const owners = await getPetOwner();
 
   return {
-    props: { data },
+    props: { data, owners },
   };
 }
 
