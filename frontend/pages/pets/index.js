@@ -28,6 +28,7 @@ import {
   MdOutlineCreate,
   MdOutlineRemove,
 } from 'react-icons/md';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import {
@@ -39,6 +40,8 @@ import {
 } from '../../utils/data/petData';
 
 function Pet({ data, owners }) {
+  const [id, setId] = useState({ id: '' });
+
   const {
     register,
     handleSubmit,
@@ -56,6 +59,18 @@ function Pet({ data, owners }) {
     };
 
     createPet(petData, data.ownerId);
+    router.replace(router.asPath);
+  };
+
+  const setValue = (data) => {
+    const petData = {
+      name: data.name,
+      animal: data.animal,
+      breed: data.breed,
+      description: data.description,
+    };
+
+    updatePet(petData, id);
     router.replace(router.asPath);
   };
 
@@ -149,6 +164,16 @@ function Pet({ data, owners }) {
                   Cancelar
                 </Button>
               </Tooltip>
+              <Tooltip label="Limpiar">
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  type="reset"
+                  leftIcon={<MdOutlineRemove />}
+                >
+                  Limpiar
+                </Button>
+              </Tooltip>
             </ModalFooter>
           </form>
         </ModalContent>
@@ -186,7 +211,10 @@ function Pet({ data, owners }) {
                 <Button
                   leftIcon={<MdOutlineCreate />}
                   colorScheme="green"
-                  onClick={onEditOpen}
+                  onClick={() => {
+                    onEditOpen();
+                    setId(pet._id);
+                  }}
                   type="reset"
                 >
                   Editar
@@ -203,7 +231,7 @@ function Pet({ data, owners }) {
         <ModalContent>
           <ModalHeader>Editar mascota</ModalHeader>
           <ModalCloseButton />
-          <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+          <form onSubmit={handleSubmit(setValue)} autoComplete="off">
             <ModalBody>
               <FormControl mt={4} isRequired>
                 <Text fontWeight="bold" mb="1rem">
@@ -237,8 +265,7 @@ function Pet({ data, owners }) {
                   colorScheme="green"
                   mr={3}
                   type="submit"
-                  onClick={() => onEditClose() && router.replace(router.asPath)}
-                  isLoading={isSubmitting}
+                  onClick={onEditClose}
                   leftIcon={<MdDone />}
                 >
                   Editar
@@ -253,6 +280,16 @@ function Pet({ data, owners }) {
                   leftIcon={<MdOutlineClose />}
                 >
                   Cancelar
+                </Button>
+              </Tooltip>
+              <Tooltip label="Limpiar">
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  type="reset"
+                  leftIcon={<MdOutlineRemove />}
+                >
+                  Limpiar
                 </Button>
               </Tooltip>
             </ModalFooter>

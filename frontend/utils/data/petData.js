@@ -48,11 +48,11 @@ export async function createPet(pet, id) {
   }
 }
 
-export async function updatePet(pet) {
+export async function updatePet(petBody, petId) {
   try {
-    const res = await fetch(`http://localhost:5000/api/pet/${pet.id}`, {
+    const res = await fetch(`http://localhost:5000/api/pet/${petId}`, {
       method: 'PUT',
-      body: JSON.stringify(pet),
+      body: JSON.stringify(petBody),
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
 
