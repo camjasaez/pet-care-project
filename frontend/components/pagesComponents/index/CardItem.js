@@ -1,13 +1,4 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Flex,
-  Heading,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Button, Card, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 const CardItem = ({ head, body, footer, href }) => {

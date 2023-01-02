@@ -1,18 +1,21 @@
-import { Grid, GridItem, Flex, List, ListItem } from '@chakra-ui/react';
+import { Grid, GridItem, Flex, List, ListItem, Button } from '@chakra-ui/react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useAuth } from './Auth';
 
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/caretakers', label: 'Caretaker' },
-  { href: '/petowners', label: 'Pet Owner' },
-  { href: '/pets', label: 'Pet' },
+  { href: '/', label: 'Home', type: ['user', 'admin'] },
+  { href: '/caretakers', label: 'Caretaker', type: ['admin'] },
+  { href: '/petowners', label: 'Pet Owner', type: ['admin'] },
+  { href: '/pets', label: 'Pet', type: ['admin', 'user'] },
   // { href: '/cares', label: 'Care' },
-  { href: '/ratings', label: 'Rating' },
-  { href: '/takecares', label: 'Take Care' },
+  { href: '/ratings', label: 'Rating', type: ['user', 'admin'] },
+  { href: '/takecares', label: 'Take Care', type: ['admin', 'user'] },
 ];
 
 const Layout = (props) => {
+  const { user, logout } = useAuth();
+  console.log(user);
   const { children } = props;
   return (
     <>
@@ -33,14 +36,24 @@ const Layout = (props) => {
       >
         <GridItem pl="2" bg="teal.300" area={'nav'}>
           <Flex direction="column" align="center">
-            <List>
-              {links.map(({ href, label }) => (
-                <ListItem p="10px" key={href}>
-                  {/* <ListIcon as={MdCheckCircle} color='green.500' /> */}
-                  <Link href={href}>{label}</Link>
-                </ListItem>
-              ))}
-            </List>
+            {user && (
+              <List>
+                {links.map(
+                  ({ href, label, type }) =>
+                    type.includes(user.type) && (
+                      <ListItem p="10px" key={href}>
+                        {/* <ListIcon as={MdCheckCircle} color='green.500' /> */}
+                        <Link href={href}>{label}</Link>
+                      </ListItem>
+                    )
+                )}
+              </List>
+            )}
+            {user && (
+              <Button color={'teal.700'} onClick={logout}>
+                Logout
+              </Button>
+            )}
           </Flex>
         </GridItem>
         <GridItem pl="2" area={'main'}>

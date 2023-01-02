@@ -17,16 +17,16 @@ import {
   Select,
 } from '@chakra-ui/react';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+import { deleteCare } from '../../utils/getCaresData';
 
 //!Esto deberia venir desde el login
-const CARE_TAKER_ID = '63853626f84349e3bc73664d';
+const CARE_TAKER_ID = '63b23d2227677615315b8ccb';
 //!
 
 const Cares = ({ petOwners }) => {
-  console.log(petOwners);
   const router = useRouter();
   const {
     register,
@@ -67,11 +67,11 @@ const Cares = ({ petOwners }) => {
 
     setSelectCare((prev) => [
       ...prev,
-      { petOwner: petOwnerFilter[0].name, pet: petFilter[0].name },
+      { petOwner: petOwnerFilter[0].name, pet: petFilter[0].name, idCare: _id },
     ]);
   };
 
-  const handleSubmitTakeCare = async () => {
+  async function handleSubmitTakeCare() {
     setSubmit((submitState) => !submitState);
     const newTakeCare = {
       careTaker: CARE_TAKER_ID,
@@ -85,22 +85,31 @@ const Cares = ({ petOwners }) => {
       },
       body: JSON.stringify(newTakeCare),
     });
+
     if (res.status === 201) {
       setSubmit((submitState) => !submitState);
       router.push('/takecares');
       return;
     }
     console.log('Error!'); //!Recordar poner los toast correspondientes
-  };
-
-  useEffect(() => {
-    console.log(cares);
-  }, [cares, submit]);
+  }
 
   const [selectPetOwner, setSelectPetOwner] = useState([]);
 
   const handleChange = (event) => {
     setSelectPetOwner(event.target.value);
+  };
+
+  const handleDeleteCare = async (caresId) => {
+    const res = await deleteCare(caresId);
+    if (res) {
+      setCares((prev) => prev.filter((care) => care !== caresId));
+      setSelectCare((prev) => prev.filter((care) => care.idCare !== caresId));
+      return;
+    }
+
+    //!Recordar poner los toast correspondientes
+    console.log('Error Eliminando el cuidado!');
   };
 
   return (
@@ -165,7 +174,9 @@ const Cares = ({ petOwners }) => {
                     <Td>{care.pet}</Td>
                     <Td>{care.petOwner}</Td>
                     <Td>
-                      <Button>Borrar</Button>
+                      <Button onClick={() => handleDeleteCare(care.idCare)}>
+                        Borrar
+                      </Button>
                     </Td>
                   </Tr>
                 ))}

@@ -14,11 +14,14 @@ async function getTakeCare(req, res) {
   try {
     const takeCares = await TakeCareModel.find()
       .populate('careTaker')
-      .populate('cares');
+      .populate({
+        path: 'cares',
+        populate: [{ path: 'pet' }, { path: 'rating' }],
+      });
 
     const statusCode = takeCares.length === 0 ? 204 : 200;
 
-    sucessResponse(req, res, 'Take Care created', takeCares, statusCode);
+    sucessResponse(req, res, 'Take Care', takeCares, statusCode);
   } catch (error) {
     console.log(error);
     errorResponse(req, res, 'Error to get the take cares', 500);
@@ -48,7 +51,7 @@ async function getTakeCareById(req, res) {
       return;
     }
 
-    sucessResponse(req, res, 'Take Care created', takeCare, 200);
+    sucessResponse(req, res, 'Take Care', takeCare, 200);
   } catch (error) {
     console.log(error);
     errorResponse(req, res, 'Error to get the take cares', 500);

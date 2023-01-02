@@ -8,32 +8,105 @@ import {
   ModalCloseButton,
   Button,
   useDisclosure,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
 } from '@chakra-ui/react';
-const DetailsButton = () => {
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+
+const DetailsButton = ({ cares }) => {
+  console.log(cares);
+
+  const [submit, setSubmit] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+
+  const handleWithdrawal = async (retirated, withdrawnId) => {
+    console.log(retirated);
+    setSubmit((submitState) => !submitState);
+
+    const body = { withdrawn: !retirated };
+    const res = await fetch(`http://localhost:5000/api/care/${withdrawnId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (res.status === 200) {
+      setSubmit((submitState) => !submitState);
+      router.replace(router.asPath);
+    }
+  };
+
   return (
     <>
       <Button onClick={onOpen}>Detalle</Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo
-              perferendis velit odio iure impedit ipsum modi at eaque ea minus
-              amet, harum reprehenderit pariatur unde nesciunt cum optio magni
-              consequuntur.
-            </p>
+            <TableContainer>
+              <Table variant="simple" size="md">
+                <TableCaption>Lista de los cuidados de ...</TableCaption>
+                <Thead>
+                  <Tr>
+                    <Th>Nombre mascota</Th>
+                    <Th>Fecha de entrada</Th>
+                    <Th>Fecha de salida</Th>
+                    <Th> ¿Retirado? </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {cares?.map((care) => (
+                    <Tr key={care._id}>
+                      <Td>{care?.pet?.name}</Td>
+                      <Td>
+                        {new Date(care.entryDate).toLocaleDateString('es-ES', {
+                          hour: 'numeric',
+                          minute: 'numeric',
+                          second: 'numeric',
+                        })}
+                      </Td>
+                      <Td>
+                        {new Date(care.exitDate).toLocaleDateString('es-ES', {
+                          hour: 'numeric',
+                          minute: 'numeric',
+                          second: 'numeric',
+                        })}
+                      </Td>
+                      <Td>{care.withdrawn ? 'Si' : 'No'}</Td>
+                      <Td>
+                        <Button
+                          isLoading={submit}
+                          onClick={() =>
+                            handleWithdrawal(care.withdrawn, care._id)
+                          }
+                        >
+                          {care.withdrawn ? 'Devolver' : 'Retirar'}
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
           </ModalBody>
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
+              Cerrar
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -1,13 +1,10 @@
 import {
   Card,
-  CardHeader,
   CardBody,
-  CardFoote,
   Text,
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
@@ -17,16 +14,78 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { getTakeCares } from '../../utils/getTakeCaresData';
-import { useState } from 'react';
 import DetailsButton from '../../components/pagesComponents/takecares/DetailsButton';
 import { useRouter } from 'next/router';
+import { useAuth } from '../../components/Auth';
+import { useEffect } from 'react';
+import DetailsCaresButton from '../../components/pagesComponents/takecares/DetailsCaresButton';
+
 function Takecare({ data: takecare }) {
-  const [activeCares, setActiveCares] = useState(0);
+  const { user, checkAuth } = useAuth();
+
+  const { pets = [] } = user?.petowner;
+
+  console.log(pets);
+  const petByOwner = pets?.map((pet) => pet);
+
+  console.log('take kare', takecare);
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   const careTotalActives = (cares) =>
-    cares.filter(({ withdrawn }) => withdrawn).length;
+    cares.filter(({ withdrawn }) => !withdrawn).length;
+
   const router = useRouter();
-  return (
+
+  console.log(user);
+  const UserLayout = (
+    <Card>
+      <CardBody>
+        <Text>Pagina de XYX</Text>
+        <Flex alignItems="center" justifyContent="center">
+          <TableContainer>
+            <Table variant="simple">
+              <TableCaption>Imperial to metric conversion factors</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Nombre Cuidador</Th>
+                  <Th>Nombre Mascota</Th>
+                  <Th>Fecha de inicio</Th>
+                  <Th>Detalles</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {takecare?.map(({ careTaker, cares, _id }) =>
+                  petByOwner?.map((pet, index) => (
+                    <Tr key={`${_id + pet._id}`}>
+                      <Td>{careTaker?.name}</Td>
+                      <Td>{pet.name}</Td>
+                      <Td>
+                        {new Date(cares[index]?.entryDate).toLocaleDateString(
+                          'es-ES',
+                          {
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            second: 'numeric',
+                          }
+                        )}
+                      </Td>
+                      <Td>
+                        <DetailsCaresButton pet={pet} cares={cares[index]} />
+                      </Td>
+                    </Tr>
+                  ))
+                )}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Flex>
+      </CardBody>
+    </Card>
+  );
+
+  const AdminLayout = (
     <Card>
       <CardBody>
         <Text>Pagina de Takecare</Text>
@@ -39,19 +98,28 @@ function Takecare({ data: takecare }) {
               <TableCaption>Imperial to metric conversion factors</TableCaption>
               <Thead>
                 <Tr>
-                  <Th>Nombre</Th>
-                  <Th>Numero</Th>
+                  <Th>Nombre Cuidador</Th>
+                  <Th>Fecha de inicio</Th>
                   <Th>Cuidados activos</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {takecare?.map(({ careTaker, cares, _id }) => (
                   <Tr key={_id}>
-                    <Td>{careTaker.name}</Td>
-                    <Td>{careTaker.number}</Td>
+                    <Td>{careTaker?.name}</Td>
+                    <Td>
+                      {new Date(cares[0]?.entryDate).toLocaleDateString(
+                        'es-ES',
+                        {
+                          hour: 'numeric',
+                          minute: 'numeric',
+                          second: 'numeric',
+                        }
+                      )}
+                    </Td>
                     <Td>{careTotalActives(cares)}</Td>
                     <Td>
-                      <DetailsButton />
+                      <DetailsButton cares={cares} />
                     </Td>
                   </Tr>
                 ))}
@@ -62,6 +130,8 @@ function Takecare({ data: takecare }) {
       </CardBody>
     </Card>
   );
+
+  return user?.type === 'admin' ? AdminLayout : UserLayout;
 }
 
 export default Takecare;

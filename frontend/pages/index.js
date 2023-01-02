@@ -1,23 +1,16 @@
-import {
-  Box,
-  Card,
-  Flex,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Grid,
-  GridItem,
-  Stack,
-  Heading,
-  Button,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
 import CardItem from '../components/pagesComponents/index/CardItem';
 import { getTakeCares } from '../utils/getTakeCaresData';
+import { useAuth } from '../components/Auth';
+import { useEffect } from 'react';
 
 export default function Home({ data: number }) {
   const totalNumber = number.length || 0;
-  console.log(number);
+  const { checkAuth } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
   return (
     <Box>
       <Grid
