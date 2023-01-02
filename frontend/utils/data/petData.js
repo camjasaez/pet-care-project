@@ -16,6 +16,23 @@ export async function getPets() {
   }
 }
 
+export async function getPet(id) {
+  try {
+    const res = await fetch(`http://localhost:5000/api/pet/${id}`, {
+      method: 'GET',
+    });
+
+    if (res.status === 204) return [];
+
+    const pets = await res.json();
+
+    const { data } = pets;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export async function getPetOwner() {
   try {
     const res = await fetch('http://localhost:5000/api/petowner', {
@@ -39,7 +56,7 @@ export async function createPet(pet, id) {
     const res = await fetch(`http://localhost:5000/api/pet/${id}`, {
       method: 'POST',
       body: JSON.stringify(pet),
-      headers: { 'Content-type': 'application/json; charset=UTF-8' },
+      headers: { 'Content-type': 'application/json' },
     });
 
     res.status === 201 && console.log('Pet created');
@@ -53,7 +70,7 @@ export async function updatePet(petBody, petId) {
     const res = await fetch(`http://localhost:5000/api/pet/${petId}`, {
       method: 'PUT',
       body: JSON.stringify(petBody),
-      headers: { 'Content-type': 'application/json; charset=UTF-8' },
+      headers: { 'Content-type': 'application/json' },
     });
 
     res.status === 200 && console.log('Pet updated');
