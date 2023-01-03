@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { respondError, respondSuccess } from '../../../utils/toast';
 
 const DetailsButton = ({ cares }) => {
   console.log(cares);
@@ -43,7 +44,10 @@ const DetailsButton = ({ cares }) => {
     if (res.status === 200) {
       setSubmit((submitState) => !submitState);
       router.replace(router.asPath);
+      respondSuccess('Se ha realizado correctamente');
+      return;
     }
+    respondError('Ha ocurrido un error');
   };
 
   return (

@@ -12,6 +12,7 @@ import {
   TableContainer,
   Flex,
   Button,
+  Container,
 } from '@chakra-ui/react';
 import { getTakeCares } from '../../utils/getTakeCaresData';
 import DetailsButton from '../../components/pagesComponents/takecares/DetailsButton';
@@ -27,8 +28,6 @@ function Takecare({ data: takecare }) {
 
   const petByOwner = pets?.map((pet) => pet);
 
-  console.log('take kare', takecare);
-
   useEffect(() => {
     checkAuth();
   }, []);
@@ -38,7 +37,6 @@ function Takecare({ data: takecare }) {
 
   const router = useRouter();
 
-  console.log(user);
   const UserLayout = (
     <Card>
       <CardBody>
@@ -46,7 +44,6 @@ function Takecare({ data: takecare }) {
         <Flex alignItems="center" justifyContent="center">
           <TableContainer>
             <Table variant="simple">
-              <TableCaption>Imperial to metric conversion factors</TableCaption>
               <Thead>
                 <Tr>
                   <Th>Nombre Cuidador</Th>
@@ -93,14 +90,12 @@ function Takecare({ data: takecare }) {
   const AdminLayout = (
     <Card>
       <CardBody>
-        <Text>Pagina de Takecare</Text>
         <Button onClick={() => router.push('/takecares/cares')}>
           Añadir cuidado
         </Button>
         <Flex alignItems="center" justifyContent="center">
           <TableContainer>
             <Table variant="simple">
-              <TableCaption>Imperial to metric conversion factors</TableCaption>
               <Thead>
                 <Tr>
                   <Th>Nombre Cuidador</Th>
@@ -136,7 +131,11 @@ function Takecare({ data: takecare }) {
     </Card>
   );
 
-  return user?.type === 'admin' ? AdminLayout : UserLayout;
+  return (
+    <Container maxW="5xl" h="100vh">
+      {user?.type === 'admin' ? AdminLayout : UserLayout}
+    </Container>
+  );
 }
 
 export default Takecare;

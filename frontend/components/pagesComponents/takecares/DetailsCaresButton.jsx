@@ -36,19 +36,19 @@ import {
   PopoverCloseButton,
   Flex,
 } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { API_URL } from '../../../utils/constants';
+import { respondError, respondSuccess } from '../../../utils/toast';
 const DetailsCaresButton = ({ pet, cares }) => {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
+    formState: { isSubmitting },
   } = useForm();
 
   const onSubmit = async (data) => {
+    setActiveRating(false);
     const res = await fetch(`${API_URL}/rating`, {
       method: 'POST',
       headers: {
@@ -58,10 +58,7 @@ const DetailsCaresButton = ({ pet, cares }) => {
     });
 
     if (res.status === 201) {
-      console.log('Calificacion guardada');
       const myRating = await res.json();
-      console.log(myRating);
-
       const resRating = await fetch(
         `${API_URL}/care/${cares._id}/rating/${myRating.data._id}`,
         {
@@ -74,20 +71,19 @@ const DetailsCaresButton = ({ pet, cares }) => {
       );
 
       if (resRating.status === 200) {
-        console.log('Calificacion guardada');
-        const myRating = await resRating.json();
-        console.log(myRating);
+        respondSuccess('Calificacion enviada correctamente');
+        return;
       }
     }
+    respondError('Error al enviar la calificacion');
   };
   const [activeRating, setActiveRating] = useState(false);
 
   const rating = cares?.rating?.rating || 0;
   const comment = cares?.rating?.comment || '';
 
-  const { id, name } = pet;
+  const { name } = pet;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
 
   return (
     <>
@@ -245,7 +241,7 @@ const DetailsCaresButton = ({ pet, cares }) => {
                       mt="10px"
                       colorScheme="blue"
                       type="submit"
-                      onClick={() => setActiveRating(false)}
+                      isLoading={isSubmitting}
                     >
                       Añadir calificacion
                     </Button>

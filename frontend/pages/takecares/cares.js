@@ -21,10 +21,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { deleteCare } from '../../utils/getCaresData';
-
-//!Esto deberia venir desde el login
-const CARE_TAKER_ID = '63b23d2227677615315b8ccb';
-//!
+import { useAuth } from '../../components/Auth';
+import { respondError, respondSuccess } from '../../utils/toast';
 
 const Cares = ({ petOwners }) => {
   const router = useRouter();
@@ -38,6 +36,8 @@ const Cares = ({ petOwners }) => {
   const [cares, setCares] = useState([]); //cares
   const [selectCare, setSelectCare] = useState([]);
   const [submit, setSubmit] = useState(false);
+
+  const { user } = useAuth() || {};
 
   const onSubmit = async (data) => {
     const newCare = {
@@ -74,7 +74,7 @@ const Cares = ({ petOwners }) => {
   async function handleSubmitTakeCare() {
     setSubmit((submitState) => !submitState);
     const newTakeCare = {
-      careTaker: CARE_TAKER_ID,
+      careTaker: user?.caretaker._id,
       cares,
     };
 
@@ -88,10 +88,11 @@ const Cares = ({ petOwners }) => {
 
     if (res.status === 201) {
       setSubmit((submitState) => !submitState);
+      respondSuccess('Cuidado creado con exito!');
       router.push('/takecares');
       return;
     }
-    console.log('Error!'); //!Recordar poner los toast correspondientes
+    respondError('Error al crear el cuidado!');
   }
 
   const [selectPetOwner, setSelectPetOwner] = useState([]);
@@ -105,11 +106,11 @@ const Cares = ({ petOwners }) => {
     if (res) {
       setCares((prev) => prev.filter((care) => care !== caresId));
       setSelectCare((prev) => prev.filter((care) => care.idCare !== caresId));
+      respondSuccess('Cuidado eliminado con exito!');
       return;
     }
 
-    //!Recordar poner los toast correspondientes
-    console.log('Error Eliminando el cuidado!');
+    respondError('Error al eliminar el cuidado!');
   };
 
   return (
