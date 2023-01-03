@@ -20,7 +20,7 @@ export async function getPetOwner() {
 
 export async function deletePetOwner(id) {
   try {
-    const res = await fetch(`http://localhost:5000/api/petowner/${id}`, {
+    const res = await fetch(http://localhost:5000/api/petowner/${id}, {
       method: "DELETE",
     });
   } catch (error) {
@@ -29,7 +29,7 @@ export async function deletePetOwner(id) {
 }
 export async function editPetOwner(id) {
   try {
-    const res = await fetch(`http://localhost:5000/api/petowner/${id}`, {
+    const res = await fetch(http://localhost:5000/api/petowner/${id}, {
       method: "PUT",
     });
   } catch (error) {
