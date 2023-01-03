@@ -14,24 +14,27 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   StackDivider,
   Heading,
   Box,
-  Text,
   Stack,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
   FormHelperText,
   Input,
   Radio,
   RadioGroup,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+  Flex,
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -54,15 +57,33 @@ const DetailsCaresButton = ({ pet, cares }) => {
       body: JSON.stringify(data),
     });
 
-    if (res.status === 200) {
+    if (res.status === 201) {
       console.log('Calificacion guardada');
       const myRating = await res.json();
       console.log(myRating);
+
+      const resRating = await fetch(
+        `${API_URL}/care/${cares._id}/rating/${myRating.data._id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (resRating.status === 200) {
+        console.log('Calificacion guardada');
+        const myRating = await resRating.json();
+        console.log(myRating);
+      }
     }
   };
   const [activeRating, setActiveRating] = useState(false);
 
   const rating = cares?.rating?.rating || 0;
+  const comment = cares?.rating?.comment || '';
 
   const { id, name } = pet;
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -98,17 +119,36 @@ const DetailsCaresButton = ({ pet, cares }) => {
                 <Tbody>
                   <Tr>
                     <Td>
-                      {rating
-                        ? `${'* '
-                            .repeat(rating)
-                            .padEnd(10, '\u00A0')} - ${rating}/5`
-                        : 'No calificado aun'}
+                      <Flex direction="column">
+                        {rating
+                          ? `${'* '
+                              .repeat(rating)
+                              .padEnd(10, '\u00A0')} - ${rating}/5`
+                          : 'No calificado aun'}
+                        <Popover>
+                          <PopoverTrigger>
+                            <Button isDisabled={!comment}>Ver detalle</Button>
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>Comentario</PopoverHeader>
+                            <PopoverBody>{comment}</PopoverBody>
+                          </PopoverContent>
+                        </Popover>
+                      </Flex>
                     </Td>
                     <Td> {cares?.withdrawn ? 'Retirado' : 'No retirado'} </Td>
-                    <Td>{cares?.exitDate}</Td>
+                    <Td>
+                      {new Date(cares?.exitDate).toLocaleDateString('es-ES', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric',
+                      })}
+                    </Td>
                     <Td>
                       <Button
-                        isDisabled={!cares?.withdrawn}
+                        isDisabled={cares?.withdrawn || rating > 0}
                         onClick={() => setActiveRating((prev) => !prev)}
                       >
                         Calificar
@@ -205,7 +245,7 @@ const DetailsCaresButton = ({ pet, cares }) => {
                       mt="10px"
                       colorScheme="blue"
                       type="submit"
-                      // onClick={onClose}
+                      onClick={() => setActiveRating(false)}
                     >
                       Añadir calificacion
                     </Button>

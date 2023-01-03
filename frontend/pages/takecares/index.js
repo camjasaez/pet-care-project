@@ -57,25 +57,30 @@ function Takecare({ data: takecare }) {
               </Thead>
               <Tbody>
                 {takecare?.map(({ careTaker, cares, _id }) =>
-                  petByOwner?.map((pet, index) => (
-                    <Tr key={`${_id + pet._id}`}>
-                      <Td>{careTaker?.name}</Td>
-                      <Td>{pet.name}</Td>
-                      <Td>
-                        {new Date(cares[index]?.entryDate).toLocaleDateString(
-                          'es-ES',
-                          {
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            second: 'numeric',
-                          }
-                        )}
-                      </Td>
-                      <Td>
-                        <DetailsCaresButton pet={pet} cares={cares[index]} />
-                      </Td>
-                    </Tr>
-                  ))
+                  petByOwner?.map(
+                    (pet, index) =>
+                      pet._id === cares[index]?.pet._id && (
+                        <Tr key={`${_id + pet._id}`}>
+                          <Td>{careTaker?.name}</Td>
+                          <Td>{pet.name}</Td>
+                          <Td>
+                            {new Date(
+                              cares[index]?.entryDate
+                            ).toLocaleDateString('es-ES', {
+                              hour: 'numeric',
+                              minute: 'numeric',
+                              second: 'numeric',
+                            })}
+                          </Td>
+                          <Td>
+                            <DetailsCaresButton
+                              pet={pet}
+                              cares={cares[index]}
+                            />
+                          </Td>
+                        </Tr>
+                      )
+                  )
                 )}
               </Tbody>
             </Table>
