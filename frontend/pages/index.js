@@ -33,7 +33,6 @@ export default function Home({ data: number }) {
               href="takecares"
             />
             <CardItem head="Animales" body={5} footer="Ver detalle" />
-            <CardItem head="Hola mundo" body={4} footer="Ver detalle" />
           </Flex>
         </GridItem>
         <GridItem pl="2" area={'footer'}></GridItem>

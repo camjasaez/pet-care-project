@@ -8,7 +8,6 @@ const links = [
   { href: '/caretakers', label: 'Caretaker', type: ['admin'] },
   { href: '/petowners', label: 'Pet Owner', type: ['admin'] },
   { href: '/pets', label: 'Pet', type: ['admin', 'user'] },
-  // { href: '/cares', label: 'Care' },
   { href: '/ratings', label: 'Rating', type: ['user', 'admin'] },
   { href: '/takecares', label: 'Take Care', type: ['admin', 'user'] },
 ];
