@@ -62,17 +62,7 @@ function Caretaker({ caretaker }) {
                     <Td>
                       <CardBody>
                         <Stack direction="row" spacing={4}>
-                          <Button
-                            onClick={() => router.push("/caretakers/agregar")}
-                          >
-                            agregar
-                          </Button>
-
-                          <Button
-                          // onClick={() => router.push("/caretakers/editar")}
-                          >
-                            editar
-                          </Button>
+                          <Button>editar</Button>
 
                           <Button
                             onClick={() => {
@@ -90,6 +80,11 @@ function Caretaker({ caretaker }) {
               </Tbody>
             </Table>
           </TableContainer>
+          <Card>
+            <Button onClick={() => router.push("/caretakers/agregar")}>
+              agregar cuidador
+            </Button>
+          </Card>
         </CardBody>
       </CardHeader>
     </Card>
