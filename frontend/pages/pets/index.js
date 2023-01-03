@@ -12,6 +12,12 @@ import {
   Th,
   Td,
   TableContainer,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
 } from '@chakra-ui/react';
 import {
   MdOutlineAdd,
@@ -21,6 +27,8 @@ import {
 } from 'react-icons/md';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useRef } from 'react';
+import { useDisclosure } from '@chakra-ui/react';
 import {
   getPets,
   deletePet,
@@ -32,6 +40,8 @@ import { useAuth } from '../../components/Auth';
 
 function Pet({ data }) {
   const { user, checkAuth } = useAuth();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
 
   const pets = user?.petowner?.pets;
 
@@ -47,6 +57,7 @@ function Pet({ data }) {
       'La mascota ha sido eliminada exitosamente',
       'Mascota eliminada'
     );
+    onClose();
   };
 
   const editarMascota = (id) => {
@@ -119,7 +130,7 @@ function Pet({ data }) {
                       <Tooltip label="Eliminar">
                         <Button
                           colorScheme="red"
-                          onClick={() => deletePet(pet._id) && botonEliminar()}
+                          onClick={onOpen}
                           leftIcon={<MdOutlineRemove />}
                           type="submit"
                           mx="2"
@@ -127,6 +138,36 @@ function Pet({ data }) {
                           Eliminar
                         </Button>
                       </Tooltip>
+                      <AlertDialog
+                        isOpen={isOpen}
+                        leastDestructiveRef={cancelRef}
+                        onClose={onClose}
+                      >
+                        <AlertDialogOverlay>
+                          <AlertDialogContent>
+                            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                              Eliminar Mascota
+                            </AlertDialogHeader>
+
+                            <AlertDialogBody>¿Estas seguro?</AlertDialogBody>
+
+                            <AlertDialogFooter>
+                              <Button ref={cancelRef} onClick={onClose}>
+                                Cancelar
+                              </Button>
+                              <Button
+                                colorScheme="red"
+                                onClick={() =>
+                                  deletePet(pet._id) && botonEliminar()
+                                }
+                                ml={3}
+                              >
+                                Eliminar
+                              </Button>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialogOverlay>
+                      </AlertDialog>
                       <Tooltip label="Editar">
                         <Button
                           leftIcon={<MdOutlineCreate />}
