@@ -50,13 +50,13 @@ const Layout = (props) => {
               </List>
             )}
             {user && (
-              <Button color={'teal.700'} onClick={logout}>
+              <Button background="black" color="white" onClick={logout}>
                 Logout
               </Button>
             )}
           </Flex>
         </GridItem>
-        <GridItem pl="2" area={'main'}>
+        <GridItem pl="2" area={'main'} bg="#12595e">
           {children}
         </GridItem>
       </Grid>
