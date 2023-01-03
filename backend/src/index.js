@@ -6,7 +6,6 @@ const express = require('express');
 const server = express();
 const nodemailer = require('nodemailer');
 
-
 // Router index
 const router = require('./api/routes/router');
 
@@ -17,3 +16,4 @@ server.use('/api', router);
 setUpServer(server);
 
 module.exports = server;
+

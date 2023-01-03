@@ -1,40 +1,6 @@
-import { useRouter } from "next/router";
 
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFoote,
-  Text,
-  Stack,
-  Button,
-  ButtonGroup,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Input,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-} from "@chakra-ui/react";
-import { useEffect } from "react";
-import { getCareTaker } from "../../utils/getCareTakerData";
-import { deleteCareTaker } from "../../utils/getCareTakerData";
-import { Agregar } from "./agregar";
-import {
-  Center,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-} from "@chakra-ui/react";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Card, CardHeader, CardBody, CardFoote, Text } from "@chakra-ui/react";
+
 
 function Caretaker({ caretaker }) {
   const router = useRouter();

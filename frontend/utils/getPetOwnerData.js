@@ -1,6 +1,11 @@
+import Petowner from "../pages/petowners/relleno";
+
 export async function getPetOwner() {
   try {
-    const res = await fetch("http://localhost:5000/api/petowner");
+    const res = await fetch("http://localhost:5000/api/petowner", {
+      method: "GET",
+    });
+
     if (res.status === 200) {
       const responseData = await res.json();
       const { data } = responseData;
@@ -12,9 +17,10 @@ export async function getPetOwner() {
     console.error(error);
   }
 }
+
 export async function deletePetOwner(id) {
   try {
-    const res = await fetch(`http://localhost:5000/api/petowner/${id}`, {
+    const res = await fetch(http://localhost:5000/api/petowner/${id}, {
       method: "DELETE",
     });
   } catch (error) {
@@ -23,34 +29,25 @@ export async function deletePetOwner(id) {
 }
 export async function editPetOwner(id) {
   try {
-    const res = await fetch(`http://localhost:5000/api/petowner/${id}`, {
+    const res = await fetch(http://localhost:5000/api/petowner/${id}, {
       method: "PUT",
     });
   } catch (error) {
     console.error(error);
   }
 }
-export async function postPetOwner(){
-try {
-    const data = {
-        name: "Relleno",
-        lastName: "Relleno",
-        rut: "Relleno",
-        email: "Relleno",
-        address: "Relleno",
-        phone: "Relleno"
-      };
 
-    const res = await fetch("http://localhost:5000/api/petowner");
-    method: "POST"
-    if (res.status === 200) {
-      const responseData = await res.json(data);
-      const { data } = responseData;
-      return data;
-    }
-    res.status === 201 && console.log("Dueño agregado");
-    return null;
+export async function createPetOwner(petowner) {
+  try {
+    const res = await fetch("http://localhost:5000/api/petowner/", {
+      method: "POST",
+      body: JSON.stringify(petowner),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    res.status === 201 && console.log("Petowner created");
   } catch (error) {
     console.error(error);
-  } 
+  }
 }
