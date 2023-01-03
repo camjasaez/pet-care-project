@@ -4,31 +4,17 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFoote,
   Text,
   Stack,
   Button,
-  ButtonGroup,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Input,
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
 import { getPetOwner } from "../../utils/getPetOwnerData";
 import { deletePetOwner } from "../../utils/getPetOwnerData";
 
@@ -58,7 +44,7 @@ function PetOwner({ petowner }) {
               </Thead>
               <Tbody>
                 {petowner.map((petowner) => (
-                  <Tr>
+                  <Tr key={petowner._id}>
                     <Td>{petowner.name}</Td>
                     <Td>{petowner.lastName}</Td>
                     <Td>{petowner.rut}</Td>

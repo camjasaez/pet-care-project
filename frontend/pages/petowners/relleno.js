@@ -2,22 +2,14 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFoote,
   Text,
-  Spacer,
   Stack,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
   Button,
   ButtonGroup,
-  onChange,
-  NumberInput,
-  RangeSliderThumb,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
 import { createPetOwner, getPetOwner } from "../../utils/getPetOwnerData";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
