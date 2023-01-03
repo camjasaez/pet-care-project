@@ -20,10 +20,27 @@ import {
   MdSettingsBackupRestore,
 } from 'react-icons/md';
 import { useRouter } from 'next/router';
-import { getPets, deletePet, getPetOwner } from '../../utils/data/petData';
+import { useEffect } from 'react';
+import {
+  getPets,
+  deletePet,
+  getPetOwner,
+  getPetOwnerById,
+} from '../../utils/data/petData';
 import { respondError } from '../../utils/toast';
+import { useAuth } from '../../components/Auth';
 
 function Pet({ data }) {
+  const { user, checkAuth } = useAuth();
+
+  const pets = user?.petowner?.pets;
+
+  console.log(pets);
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
   const botonEliminar = () => {
     router.replace(router.asPath);
     respondError(
@@ -42,7 +59,7 @@ function Pet({ data }) {
 
   const router = useRouter();
 
-  return (
+  const AdminLayout = (
     <Box>
       <Stack alignItems="center" justifyContent="center">
         <TableContainer mt={4}>
@@ -80,6 +97,7 @@ function Pet({ data }) {
               width="500px"
               height="300px"
               overflowY="scroll"
+              bg="linear-gradient(90deg, rgba(1,3,3,0.3253676470588235) 100%, rgba(79,209,197,1) 100%, rgba(79,209,197,1) 100%)"
             >
               <Thead>
                 <Tr>
@@ -132,6 +150,52 @@ function Pet({ data }) {
       </Stack>
     </Box>
   );
+
+  const UserLayout = (
+    <Box>
+      <Stack alignItems="center" justifyContent="center">
+        <TableContainer mt={4}>
+          {/* Titulo */}
+          <Text fontSize="3xl" fontWeight="bold" mb="1rem">
+            Mascotas
+          </Text>
+          <Box bg="white" h="5px" w="1000px" />
+
+          {/* tabla */}
+          <Flex justifyContent="center">
+            <Table
+              variant="simple"
+              width="500px"
+              height="300px"
+              overflowY="scroll"
+              bg="linear-gradient(90deg, rgba(1,3,3,0.3253676470588235) 100%, rgba(79,209,197,1) 100%, rgba(79,209,197,1) 100%)"
+            >
+              <Thead>
+                <Tr>
+                  <Th>Nombre</Th>
+                  <Th>Animal</Th>
+                  <Th>Raza</Th>
+                  <Th>Descripción</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {pets?.map((pet) => (
+                  <Tr key={pet._id}>
+                    <Td>{pet.name}</Td>
+                    <Td>{pet.animal}</Td>
+                    <Td>{pet.breed}</Td>
+                    <Td> {pet.description}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </Flex>
+        </TableContainer>
+      </Stack>
+    </Box>
+  );
+
+  return user?.type === 'admin' ? AdminLayout : UserLayout;
 }
 
 export async function getServerSideProps() {
