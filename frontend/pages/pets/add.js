@@ -15,8 +15,17 @@ import {
 import { MdDone, MdOutlineClose, MdOutlineRemove } from 'react-icons/md';
 import { useForm } from 'react-hook-form';
 import { respondSuccess } from '../../utils/toast';
+import { useEffect } from 'react';
+
+import { useAuth } from '../../components/Auth';
 
 function AddPet({ owners }) {
+  const { user, checkAuth } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
   const router = useRouter();
   const {
     register,
