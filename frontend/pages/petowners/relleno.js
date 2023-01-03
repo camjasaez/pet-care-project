@@ -9,6 +9,7 @@ import {
   Input,
   Button,
   ButtonGroup,
+  Spacer,
 } from "@chakra-ui/react";
 import { createPetOwner, getPetOwner } from "../../utils/getPetOwnerData";
 import { useForm } from "react-hook-form";
@@ -43,6 +44,7 @@ function Petowner({}) {
         <Text>Pagina de Petowner</Text>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardBody>
+
             <Stack spacing={2} direction="row">
               <FormControl id="rut">
                 <FormLabel>Rut</FormLabel>
@@ -73,12 +75,14 @@ function Petowner({}) {
                 <Input placeholder="Direccion" {...register("address")} />
               </FormControl>
             </Stack>
+            <CardBody>
             <ButtonGroup spacing={4}>
               <Button colorScheme="teal" type="submit" isLoading={isSubmitting}>
                 Guardar Dueño
               </Button>
               <Button onClick={() => router.push("/petowners")}>atras</Button>
             </ButtonGroup>
+            </CardBody>
           </CardBody>
         </form>
       </CardHeader>

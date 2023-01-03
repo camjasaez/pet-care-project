@@ -1,6 +1,9 @@
-
 import { Card, CardHeader, CardBody, CardFoote, Text } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from "@chakra-ui/react";
+import { Stack, Button } from "@chakra-ui/react";
 
+import { getCareTaker } from "../../utils/getCareTakerData";
+import { useRouter } from "next/router";
 
 function Caretaker({ caretaker }) {
   const router = useRouter();
