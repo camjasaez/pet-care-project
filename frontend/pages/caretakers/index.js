@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, CardFoote, Text } from '@chakra-ui/react';
+import { Card, CardHeader, CardBody, CardFoote, Text } from "@chakra-ui/react";
 
 function Caretaker({ caretaker }) {
   return (
