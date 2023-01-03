@@ -1,8 +1,19 @@
-import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
-import CardItem from '../components/pagesComponents/index/CardItem';
-import { getTakeCares } from '../utils/getTakeCaresData';
+import {
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  Text,
+  Card,
+  Stack,
+  CardBody,
+  Heading,
+  Spacer,
+} from '@chakra-ui/react';
+import { getPets } from '../utils/data/petData';
 import { useAuth } from '../components/Auth';
 import { useEffect } from 'react';
+import Image from 'next/image';
 
 export default function Home({ data: number }) {
   const totalNumber = number.length || 0;
@@ -24,16 +35,33 @@ export default function Home({ data: number }) {
       >
         <GridItem pl="2" area={'header'}></GridItem>
         <GridItem pl="2" area={'main'}>
-          <Flex alignItems="center" justifyContent="space-evenly">
-            <CardItem
-              head="Cuidados activos"
-              body={totalNumber}
-              footer="Ver detalle"
-              href="takecares"
+          <Card
+            direction={{ base: 'column', sm: 'row' }}
+            overflow="hidden"
+            variant="outline"
+          >
+            <Image
+              src="/images/PetCare.jpg"
+              width={5184 / 10}
+              height={3456 / 10}
             />
-            <CardItem head="Animales" body={5} footer="Ver detalle" />
-            <CardItem head="Hola mundo" body={4} footer="Ver detalle" />
-          </Flex>
+            <Stack>
+              <CardBody>
+                <Heading as="h2" size="3xl" noOfLines={1}>
+                  PetCare
+                </Heading>
+                <Spacer />
+                <Text fontSize="3xl" pt="10">
+                  Esta pagina web esta creada para el cuidado de mascotas.
+                </Text>
+                <Spacer />
+                <Text fontSize="3xl" pt="10">
+                  Actualmente tenemos {totalNumber} mascotas felizmente
+                  registradas.
+                </Text>
+              </CardBody>
+            </Stack>
+          </Card>
         </GridItem>
         <GridItem pl="2" area={'footer'}></GridItem>
       </Grid>
@@ -42,7 +70,7 @@ export default function Home({ data: number }) {
 }
 
 export async function getServerSideProps() {
-  const data = await getTakeCares();
+  const data = await getPets();
   return {
     props: { data },
   };
