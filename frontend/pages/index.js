@@ -22,6 +22,7 @@ export default function Home({ data: number }) {
   useEffect(() => {
     checkAuth();
   }, []);
+
   return (
     <Box>
       <Grid

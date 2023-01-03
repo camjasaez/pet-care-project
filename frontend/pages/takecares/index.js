@@ -12,6 +12,7 @@ import {
   TableContainer,
   Flex,
   Button,
+  Container,
 } from '@chakra-ui/react';
 import { getTakeCares } from '../../utils/getTakeCaresData';
 import DetailsButton from '../../components/pagesComponents/takecares/DetailsButton';
@@ -23,12 +24,10 @@ import DetailsCaresButton from '../../components/pagesComponents/takecares/Detai
 function Takecare({ data: takecare }) {
   const { user, checkAuth } = useAuth();
 
-  const { pets = [] } = user?.petowner;
+  const { pets = [] } = user?.petowner || [];
 
-  console.log(pets);
   const petByOwner = pets?.map((pet) => pet);
 
-  console.log('take kare', takecare);
   useEffect(() => {
     checkAuth();
   }, []);
@@ -38,7 +37,6 @@ function Takecare({ data: takecare }) {
 
   const router = useRouter();
 
-  console.log(user);
   const UserLayout = (
     <Card>
       <CardBody>
@@ -46,7 +44,6 @@ function Takecare({ data: takecare }) {
         <Flex alignItems="center" justifyContent="center">
           <TableContainer>
             <Table variant="simple">
-              <TableCaption>Imperial to metric conversion factors</TableCaption>
               <Thead>
                 <Tr>
                   <Th>Nombre Cuidador</Th>
@@ -57,25 +54,30 @@ function Takecare({ data: takecare }) {
               </Thead>
               <Tbody>
                 {takecare?.map(({ careTaker, cares, _id }) =>
-                  petByOwner?.map((pet, index) => (
-                    <Tr key={`${_id + pet._id}`}>
-                      <Td>{careTaker?.name}</Td>
-                      <Td>{pet.name}</Td>
-                      <Td>
-                        {new Date(cares[index]?.entryDate).toLocaleDateString(
-                          'es-ES',
-                          {
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            second: 'numeric',
-                          }
-                        )}
-                      </Td>
-                      <Td>
-                        <DetailsCaresButton pet={pet} cares={cares[index]} />
-                      </Td>
-                    </Tr>
-                  ))
+                  petByOwner?.map(
+                    (pet, index) =>
+                      pet._id === cares[index]?.pet._id && (
+                        <Tr key={`${_id + pet._id}`}>
+                          <Td>{careTaker?.name}</Td>
+                          <Td>{pet.name}</Td>
+                          <Td>
+                            {new Date(
+                              cares[index]?.entryDate
+                            ).toLocaleDateString('es-ES', {
+                              hour: 'numeric',
+                              minute: 'numeric',
+                              second: 'numeric',
+                            })}
+                          </Td>
+                          <Td>
+                            <DetailsCaresButton
+                              pet={pet}
+                              cares={cares[index]}
+                            />
+                          </Td>
+                        </Tr>
+                      )
+                  )
                 )}
               </Tbody>
             </Table>
@@ -88,14 +90,12 @@ function Takecare({ data: takecare }) {
   const AdminLayout = (
     <Card>
       <CardBody>
-        <Text>Pagina de Takecare</Text>
         <Button onClick={() => router.push('/takecares/cares')}>
           Añadir cuidado
         </Button>
         <Flex alignItems="center" justifyContent="center">
           <TableContainer>
             <Table variant="simple">
-              <TableCaption>Imperial to metric conversion factors</TableCaption>
               <Thead>
                 <Tr>
                   <Th>Nombre Cuidador</Th>
@@ -131,7 +131,11 @@ function Takecare({ data: takecare }) {
     </Card>
   );
 
-  return user?.type === 'admin' ? AdminLayout : UserLayout;
+  return (
+    <Container maxW="5xl" h="100vh">
+      {user?.type === 'admin' ? AdminLayout : UserLayout}
+    </Container>
+  );
 }
 
 export default Takecare;

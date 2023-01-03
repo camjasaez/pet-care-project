@@ -13,6 +13,7 @@ import { useForm } from 'react-hook-form';
 import { API_URL } from '../../utils/constants';
 import { useAuth } from '../../components/Auth';
 import { useEffect } from 'react';
+import { respondError, respondSuccess } from '../../utils/toast';
 
 const Login = () => {
   const { login, user, redirect } = useAuth();
@@ -53,16 +54,17 @@ const Login = () => {
 
         if (caretaker) {
           login({ type: 'admin', caretaker });
+          respondSuccess('Bienvenido');
           return;
         }
 
         if (petowner) {
           login({ type: 'user', petowner });
+          respondSuccess('Bienvenido');
           return;
         }
 
-        //! recordar los Toast
-        console.log('No encontradop');
+        respondError('No se encontro el usuario');
       })
       .catch((error) => {
         console.log(error);
