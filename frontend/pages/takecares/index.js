@@ -23,12 +23,12 @@ import DetailsCaresButton from '../../components/pagesComponents/takecares/Detai
 function Takecare({ data: takecare }) {
   const { user, checkAuth } = useAuth();
 
-  const { pets = [] } = user?.petowner;
+  const { pets = [] } = user?.petowner || [];
 
-  console.log(pets);
   const petByOwner = pets?.map((pet) => pet);
 
   console.log('take kare', takecare);
+
   useEffect(() => {
     checkAuth();
   }, []);
