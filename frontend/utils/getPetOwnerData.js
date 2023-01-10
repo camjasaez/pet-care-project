@@ -1,9 +1,9 @@
-import Petowner from "../pages/petowners/relleno";
+import Petowner from '../pages/petowners/relleno';
 
 export async function getPetOwner() {
   try {
-    const res = await fetch("http://localhost:5000/api/petowner", {
-      method: "GET",
+    const res = await fetch('http://localhost:5000/api/petowner', {
+      method: 'GET',
     });
 
     if (res.status === 200) {
@@ -20,17 +20,18 @@ export async function getPetOwner() {
 
 export async function deletePetOwner(id) {
   try {
-    const res = await fetch(http://localhost:5000/api/petowner/${id}, {
-      method: "DELETE",
+    const res = await fetch('http://localhost:5000/api/petowner/${id}', {
+      method: 'DELETE',
     });
   } catch (error) {
     console.error(error);
   }
 }
+
 export async function editPetOwner(id) {
   try {
-    const res = await fetch(http://localhost:5000/api/petowner/${id}, {
-      method: "PUT",
+    const res = await fetch('http://localhost:5000/api/petowner/${id}', {
+      method: 'PUT',
     });
   } catch (error) {
     console.error(error);
@@ -39,14 +40,14 @@ export async function editPetOwner(id) {
 
 export async function createPetOwner(petowner) {
   try {
-    const res = await fetch("http://localhost:5000/api/petowner/", {
-      method: "POST",
+    const res = await fetch('http://localhost:5000/api/petowner/', {
+      method: 'POST',
       body: JSON.stringify(petowner),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
-    res.status === 201 && console.log("Petowner created");
+    res.status === 201 && console.log('Petowner created');
   } catch (error) {
     console.error(error);
   }
