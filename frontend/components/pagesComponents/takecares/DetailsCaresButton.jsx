@@ -40,6 +40,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { API_URL } from '../../../utils/constants';
 import { respondError, respondSuccess } from '../../../utils/toast';
+
 const DetailsCaresButton = ({ pet, cares }) => {
   const {
     register,
@@ -144,7 +145,7 @@ const DetailsCaresButton = ({ pet, cares }) => {
                     </Td>
                     <Td>
                       <Button
-                        isDisabled={cares?.withdrawn || rating > 0}
+                        isDisabled={!cares?.withdrawn}
                         onClick={() => setActiveRating((prev) => !prev)}
                       >
                         Calificar

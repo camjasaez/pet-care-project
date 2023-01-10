@@ -83,11 +83,16 @@ const DetailsButton = ({ cares }) => {
                         })}
                       </Td>
                       <Td>
-                        {new Date(care.exitDate).toLocaleDateString('es-ES', {
-                          hour: 'numeric',
-                          minute: 'numeric',
-                          second: 'numeric',
-                        })}
+                        {care.exitDate
+                          ? new Date(care.exitDate).toLocaleDateString(
+                              'es-ES',
+                              {
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                second: 'numeric',
+                              }
+                            )
+                          : ''}
                       </Td>
                       <Td>{care.withdrawn ? 'Si' : 'No'}</Td>
                       <Td>

@@ -1,4 +1,3 @@
-import Petowner from '../pages/petowners/relleno';
 import { API_URL } from '../utils/constants';
 
 export async function getPetOwner() {
