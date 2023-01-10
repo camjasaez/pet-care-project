@@ -22,14 +22,11 @@ import { useRouter } from 'next/router';
 import { respondError, respondSuccess } from '../../../utils/toast';
 
 const DetailsButton = ({ cares }) => {
-  console.log(cares);
-
   const [submit, setSubmit] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
   const handleWithdrawal = async (retirated, withdrawnId) => {
-    console.log(retirated);
     setSubmit((submitState) => !submitState);
 
     const body = { withdrawn: !retirated };
