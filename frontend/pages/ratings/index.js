@@ -26,7 +26,9 @@ import { useEffect } from 'react';
 
 function Rating({ cares }) {
   const { checkAuth } = useAuth();
-
+  console.log(cares); 
+    
+    
   useEffect(() => {
     checkAuth();
   }, []);

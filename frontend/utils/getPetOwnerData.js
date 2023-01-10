@@ -1,11 +1,11 @@
 import Petowner from '../pages/petowners/relleno';
+import { API_URL } from '../utils/constants';
 
 export async function getPetOwner() {
   try {
-    const res = await fetch('http://localhost:5000/api/petowner', {
+    const res = await fetch(`${API_URL}/petowner`, {
       method: 'GET',
     });
-
     if (res.status === 200) {
       const responseData = await res.json();
       const { data } = responseData;
@@ -20,7 +20,7 @@ export async function getPetOwner() {
 
 export async function deletePetOwner(id) {
   try {
-    const res = await fetch('http://localhost:5000/api/petowner/${id}', {
+    const res = await fetch(`${API_URL}/petowner/${id}`, {
       method: 'DELETE',
     });
   } catch (error) {
@@ -40,7 +40,7 @@ export async function editPetOwner(id) {
 
 export async function createPetOwner(petowner) {
   try {
-    const res = await fetch('http://localhost:5000/api/petowner/', {
+    const res = await fetch(`${API_URL}/petowner/`, {
       method: 'POST',
       body: JSON.stringify(petowner),
       headers: {

@@ -49,7 +49,9 @@ function caretaker({}) {
         <Button
           type="submit"
           isLoading={isSubmitting}
-          onClick={() => router.push("/caretakers")}
+          onClick={() => router.push("/caretakers")
+
+        }
         >
           guardar
         </Button>
