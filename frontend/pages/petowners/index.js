@@ -1,5 +1,4 @@
-
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 import {
   Card,
   CardHeader,
@@ -14,18 +13,25 @@ import {
   Th,
   Td,
   TableContainer,
-} from "@chakra-ui/react";
-import { getPetOwner } from "../../utils/getPetOwnerData";
-import { deletePetOwner } from "../../utils/getPetOwnerData";
+} from '@chakra-ui/react';
+import { getPetOwner } from '../../utils/getPetOwnerData';
+import { deletePetOwner } from '../../utils/getPetOwnerData';
+import { useAuth } from '../../components/Auth';
 
 function PetOwner({ petowner }) {
+  const { checkAuth } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
   const router = useRouter();
   return (
-    <Card direction={{ base: "column" }}>
+    <Card direction={{ base: 'column' }}>
       <CardHeader>
         <Text fontSize="2xl">Dueños</Text>
         <CardBody>
-          <Button onClick={() => router.push("/petowners/relleno")}>
+          <Button onClick={() => router.push('/petowners/relleno')}>
             agregar dueños
           </Button>
         </CardBody>
@@ -54,8 +60,13 @@ function PetOwner({ petowner }) {
                     <Td>
                       <CardBody>
                         <Stack direction="row" spacing={4}>
-                          <Button>editar</Button>
-
+                          <Button
+                            onClick={() => {
+                              router.push(`/petowners/${petowner._id}`);
+                            }}
+                          >
+                            editar
+                          </Button>
                           <Button
                             onClick={() => {
                               deletePetOwner(petowner._id) &&

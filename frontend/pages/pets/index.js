@@ -29,12 +29,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useRef } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
-import {
-  getPets,
-  deletePet,
-  getPetOwner,
-  getPetOwnerById,
-} from '../../utils/data/petData';
+import { getPets, deletePet, getPetOwner } from '../../utils/data/petData';
 import { respondError } from '../../utils/toast';
 import { useAuth } from '../../components/Auth';
 
@@ -44,8 +39,6 @@ function Pet({ data }) {
   const cancelRef = useRef();
 
   const pets = user?.petowner?.pets;
-
-  console.log(pets);
 
   useEffect(() => {
     checkAuth();

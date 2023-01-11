@@ -1,14 +1,34 @@
-import { Card, CardHeader, CardBody, CardFoote, Text } from "@chakra-ui/react";
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from "@chakra-ui/react";
-import { Stack, Button } from "@chakra-ui/react";
-
-import { getCareTaker } from "../../utils/getCareTakerData";
-import { useRouter } from "next/router";
+import { Card, CardHeader, CardBody, CardFoote, Text } from '@chakra-ui/react';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+} from '@chakra-ui/react';
+import { Stack, Button } from '@chakra-ui/react';
+import { useAuth } from '../../components/Auth';
+import { useEffect } from 'react';
+import { getCareTaker, deleteCareTaker } from '../../utils/getCareTakerData';
+import { useRouter } from 'next/router';
 
 function Caretaker({ caretaker }) {
+  const { checkAuth } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const accionEditar = (id) => {
+    router.push(`/caretakers/${id}`);
+  };
+
   const router = useRouter();
+
   return (
-    <Card direction={{ base: "column" }}>
+    <Card direction={{ base: 'column' }}>
       <CardHeader>
         <Text fontSize="2xl">Cuidadores</Text>
         <CardBody>
@@ -24,14 +44,21 @@ function Caretaker({ caretaker }) {
               </Thead>
               <Tbody>
                 {caretaker.map((caretaker) => (
-                  <Tr>
+                  <Tr key={caretaker._id}>
                     <Td>{caretaker.name}</Td>
                     <Td>{caretaker.rut}</Td>
                     <Td isNumeric>{caretaker.number}</Td>
                     <Td>
                       <CardBody>
                         <Stack direction="row" spacing={4}>
-                          <Button>editar</Button>
+                          <Button
+                            type="reset"
+                            onClick={() => {
+                              accionEditar(caretaker._id);
+                            }}
+                          >
+                            editar
+                          </Button>
 
                           <Button
                             onClick={() => {
@@ -50,7 +77,7 @@ function Caretaker({ caretaker }) {
             </Table>
           </TableContainer>
           <Card>
-            <Button onClick={() => router.push("/caretakers/agregar")}>
+            <Button onClick={() => router.push('/caretakers/agregar')}>
               agregar cuidador
             </Button>
           </Card>
