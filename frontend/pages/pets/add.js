@@ -53,7 +53,7 @@ function AddPet({ owners }) {
       router.push('/pets');
       return;
     }
-    'La mascota no fue agregada', 'Mascota error';
+    respondError('La mascota no fue agregada', 'Mascota error');
   };
 
   return (
@@ -160,7 +160,6 @@ function AddPet({ owners }) {
                 colorScheme="green"
                 mr={3}
                 type="submit"
-                onClick={() => {}}
                 mt={4}
                 isLoading={isSubmitting}
                 leftIcon={<MdDone />}
