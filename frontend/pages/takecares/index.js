@@ -8,11 +8,11 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   Flex,
   Button,
   Container,
+  Box,
 } from '@chakra-ui/react';
 import { getTakeCares } from '../../utils/getTakeCaresData';
 import DetailsButton from '../../components/pagesComponents/takecares/DetailsButton';
@@ -20,13 +20,14 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../components/Auth';
 import { useEffect } from 'react';
 import DetailsCaresButton from '../../components/pagesComponents/takecares/DetailsCaresButton';
+import { MdOutlineAdd } from 'react-icons/md';
 
 function Takecare({ data: takecare }) {
   const { user, checkAuth } = useAuth();
 
   const { pets = [] } = user?.petowner || [];
 
-  const petByOwner = pets?.map((pet) => pet);
+  const petByOwner = pets?.map((pet) => pet._id);
 
   useEffect(() => {
     checkAuth();
@@ -40,7 +41,7 @@ function Takecare({ data: takecare }) {
   const UserLayout = (
     <Card>
       <CardBody>
-        <Text>Pagina de XYX</Text>
+        <Text>Pagina de mis cuidados</Text>
         <Flex alignItems="center" justifyContent="center">
           <TableContainer>
             <Table variant="simple">
@@ -54,25 +55,26 @@ function Takecare({ data: takecare }) {
               </Thead>
               <Tbody>
                 {takecare?.map(({ careTaker, cares, _id }) =>
-                  petByOwner?.map(
-                    (pet, index) =>
-                      pet._id === cares[index]?.pet._id && (
-                        <Tr key={`${_id + pet._id}`}>
+                  cares.map(
+                    (care) =>
+                      petByOwner?.includes(care.pet._id) && (
+                        <Tr key={care._id}>
                           <Td>{careTaker?.name}</Td>
-                          <Td>{pet.name}</Td>
+                          <Td>{care.pet?.name}</Td>
                           <Td>
-                            {new Date(
-                              cares[index]?.entryDate
-                            ).toLocaleDateString('es-ES', {
-                              hour: 'numeric',
-                              minute: 'numeric',
-                              second: 'numeric',
-                            })}
+                            {new Date(care.entryDate).toLocaleDateString(
+                              'es-ES',
+                              {
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                second: 'numeric',
+                              }
+                            )}
                           </Td>
                           <Td>
                             <DetailsCaresButton
-                              pet={pet}
-                              cares={cares[index]}
+                              care={care}
+                              petId={care.pet._id}
                             />
                           </Td>
                         </Tr>
@@ -88,14 +90,22 @@ function Takecare({ data: takecare }) {
   );
 
   const AdminLayout = (
-    <Card>
+    <Card bg="#12595e">
       <CardBody>
-        <Button onClick={() => router.push('/takecares/cares')}>
+        <Button
+          colorScheme="blue"
+          leftIcon={<MdOutlineAdd />}
+          mx="2"
+          onClick={() => router.push('/takecares/cares')}
+        >
           Añadir cuidado
         </Button>
-        <Flex alignItems="center" justifyContent="center">
+        <Flex alignItems="center" justifyContent="center" mt="30px">
           <TableContainer>
-            <Table variant="simple">
+            <Table
+              variant="simple"
+              bg="linear-gradient(90deg, rgba(1,3,3,0.3253676470588235) 100%, rgba(79,209,197,1) 100%, rgba(79,209,197,1) 100%)"
+            >
               <Thead>
                 <Tr>
                   <Th>Nombre Cuidador</Th>
@@ -133,6 +143,10 @@ function Takecare({ data: takecare }) {
 
   return (
     <Container maxW="5xl" h="100vh">
+      <Text fontSize="3xl" fontWeight="bold" mb="1rem">
+        Cuidados
+      </Text>
+      <Box bg="white" h="5px" w="1000px" />
       {user?.type === 'admin' ? AdminLayout : UserLayout}
     </Container>
   );

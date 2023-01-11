@@ -23,6 +23,7 @@ import { useRouter } from 'next/router';
 import { deleteCare } from '../../utils/getCaresData';
 import { useAuth } from '../../components/Auth';
 import { respondError, respondSuccess } from '../../utils/toast';
+import { API_URL } from '../../utils/constants';
 
 const Cares = ({ petOwners }) => {
   const router = useRouter();
@@ -44,7 +45,7 @@ const Cares = ({ petOwners }) => {
       pet: data.pet,
     };
 
-    const res = await fetch(`http://localhost:5000/api/care`, {
+    const res = await fetch(`${API_URL}/care`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -78,7 +79,7 @@ const Cares = ({ petOwners }) => {
       cares,
     };
 
-    const res = await fetch(`http://localhost:5000/api/takecare`, {
+    const res = await fetch(`${API_URL}/takecare`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -115,7 +116,7 @@ const Cares = ({ petOwners }) => {
 
   return (
     <Flex h="100vh" alignItems="center" justifyContent="center">
-      <Card>
+      <Card bg="linear-gradient(90deg, rgba(1,3,3,0.3253676470588235) 100%, rgba(79,209,197,1) 100%, rgba(79,209,197,1) 100%)">
         <CardHeader>
           {/* <Text align="center"> Busca el nombre de la mascota a cuidar</Text> */}
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -205,8 +206,8 @@ const Cares = ({ petOwners }) => {
 
 export default Cares;
 
-export async function getServerSideProps(context) {
-  const res = await fetch(`http://localhost:5000/api/petowner`);
+export async function getServerSideProps() {
+  const res = await fetch(`${API_URL}/petowner`);
   const { data: petOwners } = await res.json();
   return {
     props: { petOwners }, // will be passed to the page component as props
