@@ -1,11 +1,10 @@
-import { API_URL } from "../utils/constants";
+import { API_URL } from '../utils/constants';
 
 export async function getPetOwner() {
   try {
     const res = await fetch(`${API_URL}/petowner`, {
-      method: "GET",
+      method: 'GET',
     });
-
     if (res.status === 200) {
       const responseData = await res.json();
       const { data } = responseData;
@@ -21,7 +20,7 @@ export async function getPetOwner() {
 export async function deletePetOwner(id) {
   try {
     const res = await fetch(`${API_URL}/petowner/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
   } catch (error) {
     console.error(error);
@@ -30,8 +29,8 @@ export async function deletePetOwner(id) {
 
 export async function editPetOwner(id) {
   try {
-    const res = await fetch(`${API_URL}/petowner/${id}`, {
-      method: "PUT",
+    const res = await fetch('http://localhost:5000/api/petowner/${id}', {
+      method: 'PUT',
     });
   } catch (error) {
     console.error(error);
@@ -41,13 +40,13 @@ export async function editPetOwner(id) {
 export async function createPetOwner(petowner) {
   try {
     const res = await fetch(`${API_URL}/petowner/`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(petowner),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
-    res.status === 201 && console.log("Petowner created");
+    res.status === 201 && console.log('Petowner created');
   } catch (error) {
     console.error(error);
   }

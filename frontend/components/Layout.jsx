@@ -5,11 +5,11 @@ import { useAuth } from './Auth';
 
 const links = [
   { href: '/', label: 'Home', type: ['user', 'admin'] },
-  { href: '/caretakers', label: 'Caretaker', type: ['admin'] },
-  { href: '/petowners', label: 'Pet Owner', type: ['admin'] },
-  { href: '/pets', label: 'Pet', type: ['admin', 'user'] },
-  { href: '/ratings', label: 'Rating', type: ['user', 'admin'] },
-  { href: '/takecares', label: 'Take Care', type: ['admin', 'user'] },
+  { href: '/caretakers', label: 'Cuidadores', type: ['admin'] },
+  { href: '/petowners', label: 'Dueños', type: ['admin'] },
+  { href: '/pets', label: 'Mascotas', type: ['admin', 'user'] },
+  { href: '/ratings', label: 'Calificaciones', type: ['user', 'admin'] },
+  { href: '/takecares', label: 'Cuidados', type: ['admin', 'user'] },
 ];
 
 const Layout = (props) => {
@@ -40,7 +40,14 @@ const Layout = (props) => {
                 {links.map(
                   ({ href, label, type }) =>
                     type.includes(user.type) && (
-                      <ListItem p="10px" key={href}>
+                      <ListItem
+                        p="10px"
+                        key={href}
+                        _hover={{
+                          background: 'teal.400',
+                          cursor: 'pointer',
+                        }}
+                      >
                         {/* <ListIcon as={MdCheckCircle} color='green.500' /> */}
                         <Link href={href}>{label}</Link>
                       </ListItem>
