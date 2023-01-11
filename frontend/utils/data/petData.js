@@ -43,8 +43,9 @@ export async function createPet(pet, id) {
       body: JSON.stringify(pet),
       headers: { 'Content-type': 'application/json' },
     });
+    if (res.status === 201) return { error: '' };
 
-    res.status === 201 && console.log('Pet created');
+    return { error: 'No se puede agregar' };
   } catch (err) {
     console.log(err);
   }
