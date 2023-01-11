@@ -27,10 +27,14 @@ export async function deletePetOwner(id) {
   }
 }
 
-export async function editPetOwner(id) {
+export async function editPetOwner(petOwner, id) {
   try {
-    const res = await fetch('http://localhost:5000/api/petowner/${id}', {
+    const res = await fetch(`${API_URL}/petowner/${id}`, {
       method: 'PUT',
+      body: JSON.stringify(petOwner),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   } catch (error) {
     console.error(error);
