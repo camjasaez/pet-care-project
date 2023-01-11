@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { MdDone, MdOutlineClose, MdOutlineRemove } from 'react-icons/md';
 import { useForm } from 'react-hook-form';
-import { respondSuccess } from '../../utils/toast';
+import { respondError, respondSuccess } from '../../utils/toast';
 import { useEffect } from 'react';
 
 import { useAuth } from '../../components/Auth';
@@ -30,8 +30,10 @@ function AddPet({ owners }) {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm();
+
+  console.log(errors);
 
   const onSubmit = (data) => {
     const petData = {
@@ -41,8 +43,17 @@ function AddPet({ owners }) {
       description: data.description,
     };
 
-    createPet(petData, data.ownerId);
-    router.push('/pets');
+    const res = createPet(petData, data.ownerId);
+    console.log(res);
+    if (res) {
+      respondSuccess(
+        'La mascota ha sido agregada exitosamente',
+        'Mascota agregada'
+      );
+      router.push('/pets');
+      return;
+    }
+    respondError('La mascota no fue agregada', 'Mascota error');
   };
 
   return (
@@ -60,37 +71,88 @@ function AddPet({ owners }) {
               </Text>
               <Select
                 placeholder="Selecciona al Dueño"
-                {...register('ownerId')}
+                {...register('ownerId', { required: true })}
               >
                 {owners &&
                   owners.map((owner) => (
                     <option key={owner._id} value={owner._id}>
                       {owner.name}
+                      {'  '}
+                      {owner.lastName}
                     </option>
                   ))}
+                {errors.ownerId?.type === 'required' && (
+                  <p>El dueño es requerido</p>
+                )}
               </Select>
               <Text fontWeight="bold" mb="1rem">
                 Nombre
               </Text>
-              <Input placeholder="Nombre" {...register('name')} />
+              <Input
+                placeholder="Nombre"
+                {...register('name', {
+                  pattern: /[A-Za-z]{3}/,
+                  required: true,
+                })}
+              />
+              {errors.name?.type === 'pattern' && (
+                <p>Ingrese el nombre solo con letras</p>
+              )}
+              {errors.name?.type === 'required' && (
+                <p>El nombre es requerido</p>
+              )}
             </FormControl>
             <FormControl mt={4} required>
               <Text fontWeight="bold" mb="1rem">
                 Animal
               </Text>
-              <Input placeholder="Animal" {...register('animal')} />
+              <Input
+                placeholder="Animal"
+                {...register('animal', {
+                  pattern: /[A-Za-z]{3}/,
+                  required: true,
+                })}
+              />
+              {errors.animal?.type === 'pattern' && (
+                <p>Ingrese al animal solo con letras</p>
+              )}
+              {errors.animal?.type === 'required' && (
+                <p>El animal es requerido</p>
+              )}
             </FormControl>
             <FormControl mt={4} required>
               <Text fontWeight="bold" mb="1rem">
                 Raza
               </Text>
-              <Input placeholder="Raza" {...register('breed')} />
+              <Input
+                placeholder="Raza"
+                {...register('breed', {
+                  pattern: /[A-Za-z]{3}/,
+                  required: true,
+                })}
+              />
+              {errors.breed?.type === 'pattern' && (
+                <p>Ingrese la raza solo con letras</p>
+              )}
+              {errors.breed?.type === 'required' && <p>La raza es requerido</p>}
             </FormControl>
             <FormControl mt={4} required>
               <Text fontWeight="bold" mb="1rem">
                 Descripción
               </Text>
-              <Input placeholder="Descripción" {...register('description')} />
+              <Input
+                placeholder="Descripción"
+                {...register('description', {
+                  pattern: /[A-Za-z]{3}/,
+                  required: true,
+                })}
+              />
+              {errors.description?.type === 'pattern' && (
+                <p>Ingrese la descripción solo con letras</p>
+              )}
+              {errors.description?.type === 'required' && (
+                <p>La descripción es requerido</p>
+              )}
             </FormControl>
 
             <Tooltip label="Aceptar">
@@ -98,12 +160,6 @@ function AddPet({ owners }) {
                 colorScheme="green"
                 mr={3}
                 type="submit"
-                onClick={() => {
-                  respondSuccess(
-                    'La mascota ha sido agregada exitosamente',
-                    'Mascota agregada'
-                  );
-                }}
                 mt={4}
                 isLoading={isSubmitting}
                 leftIcon={<MdDone />}
