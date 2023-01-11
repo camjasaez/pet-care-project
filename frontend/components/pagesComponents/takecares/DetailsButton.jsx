@@ -20,6 +20,7 @@ import {
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { respondError, respondSuccess } from '../../../utils/toast';
+import { API_URL } from '../../../utils/constants';
 
 const DetailsButton = ({ cares }) => {
   const [submit, setSubmit] = useState(false);
@@ -30,7 +31,8 @@ const DetailsButton = ({ cares }) => {
     setSubmit((submitState) => !submitState);
 
     const body = { withdrawn: !retirated };
-    const res = await fetch(`http://localhost:5000/api/care/${withdrawnId}`, {
+
+    const res = await fetch(`${API_URL}/care/${withdrawnId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -54,7 +56,7 @@ const DetailsButton = ({ cares }) => {
       <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Detalle de cuidado</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <TableContainer>

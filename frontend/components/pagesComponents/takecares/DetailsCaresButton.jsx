@@ -36,12 +36,12 @@ import {
   PopoverCloseButton,
   Flex,
 } from '@chakra-ui/react';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { API_URL } from '../../../utils/constants';
 import { respondError, respondSuccess } from '../../../utils/toast';
+import { useEffect, useState } from 'react';
 
-const DetailsCaresButton = ({ pet, cares }) => {
+const DetailsCaresButton = ({ petId, cares }) => {
   const {
     register,
     handleSubmit,
@@ -79,16 +79,22 @@ const DetailsCaresButton = ({ pet, cares }) => {
     respondError('Error al enviar la calificacion');
   };
   const [activeRating, setActiveRating] = useState(false);
+  const [pet, setPet] = useState({});
 
   const rating = cares?.rating?.rating || 0;
   const comment = cares?.rating?.comment || '';
 
-  const { name } = pet;
+  useEffect(() => {
+    fetch(`${API_URL}/pet/${petId}`)
+      .then((res) => res.json())
+      .then((res) => setPet(res.data));
+  }, []);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      <Button onClick={onOpen}>Detalle X</Button>
+      <Button onClick={onOpen}>Detalle</Button>
 
       <Modal
         isOpen={isOpen}
@@ -100,7 +106,7 @@ const DetailsCaresButton = ({ pet, cares }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Informacion de {name}</ModalHeader>
+          <ModalHeader>Informacion de {pet?.name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <TableContainer>
@@ -137,11 +143,13 @@ const DetailsCaresButton = ({ pet, cares }) => {
                     </Td>
                     <Td> {cares?.withdrawn ? 'Retirado' : 'No retirado'} </Td>
                     <Td>
-                      {new Date(cares?.exitDate).toLocaleDateString('es-ES', {
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        second: 'numeric',
-                      })}
+                      {cares?.exitDate
+                        ? new Date(cares.exitDate).toLocaleDateString('es-ES', {
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            second: 'numeric',
+                          })
+                        : ''}
                     </Td>
                     <Td>
                       <Button
