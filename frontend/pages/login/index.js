@@ -79,7 +79,7 @@ const Login = () => {
       width="300px"
       margin="100px auto"
     >
-      <Card align="center" maxW="sm">
+      <Card align="center" maxW="sm" bg="linear-gradient(90deg, rgba(1,3,3,0.3253676470588235) 100%, rgba(79,209,197,1) 100%, rgba(79,209,197,1) 100%)">
         <CardHeader>
           <Heading>Login</Heading>
         </CardHeader>

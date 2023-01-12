@@ -120,6 +120,19 @@ function Pet({ data }) {
                     <Td>{pet.breed}</Td>
                     <Td> {pet.description}</Td>
                     <Td>
+                    <Tooltip label="Editar">
+                        <Button
+                          leftIcon={<MdOutlineCreate />}
+                          colorScheme="green"
+                          onClick={() => {
+                            editarMascota(pet._id);
+                          }}
+                          type="reset"
+                          mx="2"
+                        >
+                          Editar
+                        </Button>
+                      </Tooltip>
                       <Tooltip label="Eliminar">
                         <Button
                           colorScheme="red"
@@ -161,7 +174,7 @@ function Pet({ data }) {
                           </AlertDialogContent>
                         </AlertDialogOverlay>
                       </AlertDialog>
-                      <Tooltip label="Editar">
+                      {/* <Tooltip label="Editar">
                         <Button
                           leftIcon={<MdOutlineCreate />}
                           colorScheme="green"
@@ -173,7 +186,7 @@ function Pet({ data }) {
                         >
                           Editar
                         </Button>
-                      </Tooltip>
+                      </Tooltip> */}
                     </Td>
                   </Tr>
                 ))}
