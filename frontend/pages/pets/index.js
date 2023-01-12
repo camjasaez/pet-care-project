@@ -71,7 +71,7 @@ function Pet({ data }) {
           <Text fontSize="3xl" fontWeight="bold" mb="1rem">
             Mascotas
           </Text>
-          <Box bg="white" h="5px" w="1000px" />
+          <Box bg="white" h="5px" w="100%" />
 
           {/* Boton para agregar */}
           <Flex flexDirection="row" p="25">
