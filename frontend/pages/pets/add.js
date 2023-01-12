@@ -1,6 +1,6 @@
-import React from 'react';
-import { useRouter } from 'next/router';
-import { getPets, createPet, getPetOwner } from '../../utils/data/petData';
+import React from "react";
+import { useRouter } from "next/router";
+import { getPets, createPet, getPetOwner } from "../../utils/data/petData";
 import {
   Box,
   Button,
@@ -11,13 +11,13 @@ import {
   TableContainer,
   Tooltip,
   Stack,
-} from '@chakra-ui/react';
-import { MdDone, MdOutlineClose, MdOutlineRemove } from 'react-icons/md';
-import { useForm } from 'react-hook-form';
-import { respondError, respondSuccess } from '../../utils/toast';
-import { useEffect } from 'react';
+} from "@chakra-ui/react";
+import { MdDone, MdOutlineClose, MdOutlineRemove } from "react-icons/md";
+import { useForm } from "react-hook-form";
+import { respondError, respondSuccess } from "../../utils/toast";
+import { useEffect } from "react";
 
-import { useAuth } from '../../components/Auth';
+import { useAuth } from "../../components/Auth";
 
 function AddPet({ owners }) {
   const { user, checkAuth } = useAuth();
@@ -47,13 +47,13 @@ function AddPet({ owners }) {
     console.log(res);
     if (res) {
       respondSuccess(
-        'La mascota ha sido agregada exitosamente',
-        'Mascota agregada'
+        "La mascota ha sido agregada exitosamente",
+        "Mascota agregada"
       );
-      router.push('/pets');
+      router.push("/pets");
       return;
     }
-    respondError('La mascota no fue agregada', 'Mascota error');
+    respondError("La mascota no fue agregada", "Mascota error");
   };
 
   return (
@@ -63,7 +63,7 @@ function AddPet({ owners }) {
           <Text fontWeight="bold" fontSize="3xl" mb="1rem">
             Agregar Mascota
           </Text>
-          <Box bg="white" h="5px" w="1000px" />
+          <Box bg="white" h="5px" w="100%" />
           <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" required>
             <FormControl mt={4} required>
               <Text fontWeight="bold" mb="1rem">
@@ -71,17 +71,17 @@ function AddPet({ owners }) {
               </Text>
               <Select
                 placeholder="Selecciona al Dueño"
-                {...register('ownerId', { required: true })}
+                {...register("ownerId", { required: true })}
               >
                 {owners &&
                   owners.map((owner) => (
                     <option key={owner._id} value={owner._id}>
                       {owner.name}
-                      {'  '}
+                      {"  "}
                       {owner.lastName}
                     </option>
                   ))}
-                {errors.ownerId?.type === 'required' && (
+                {errors.ownerId?.type === "required" && (
                   <p>El dueño es requerido</p>
                 )}
               </Select>
@@ -90,15 +90,15 @@ function AddPet({ owners }) {
               </Text>
               <Input
                 placeholder="Nombre"
-                {...register('name', {
+                {...register("name", {
                   pattern: /[A-Za-z]{3}/,
                   required: true,
                 })}
               />
-              {errors.name?.type === 'pattern' && (
+              {errors.name?.type === "pattern" && (
                 <p>Ingrese el nombre solo con letras</p>
               )}
-              {errors.name?.type === 'required' && (
+              {errors.name?.type === "required" && (
                 <p>El nombre es requerido</p>
               )}
             </FormControl>
@@ -108,15 +108,15 @@ function AddPet({ owners }) {
               </Text>
               <Input
                 placeholder="Animal"
-                {...register('animal', {
+                {...register("animal", {
                   pattern: /[A-Za-z]{3}/,
                   required: true,
                 })}
               />
-              {errors.animal?.type === 'pattern' && (
+              {errors.animal?.type === "pattern" && (
                 <p>Ingrese al animal solo con letras</p>
               )}
-              {errors.animal?.type === 'required' && (
+              {errors.animal?.type === "required" && (
                 <p>El animal es requerido</p>
               )}
             </FormControl>
@@ -126,15 +126,15 @@ function AddPet({ owners }) {
               </Text>
               <Input
                 placeholder="Raza"
-                {...register('breed', {
+                {...register("breed", {
                   pattern: /[A-Za-z]{3}/,
                   required: true,
                 })}
               />
-              {errors.breed?.type === 'pattern' && (
+              {errors.breed?.type === "pattern" && (
                 <p>Ingrese la raza solo con letras</p>
               )}
-              {errors.breed?.type === 'required' && <p>La raza es requerido</p>}
+              {errors.breed?.type === "required" && <p>La raza es requerido</p>}
             </FormControl>
             <FormControl mt={4} required>
               <Text fontWeight="bold" mb="1rem">
@@ -142,15 +142,15 @@ function AddPet({ owners }) {
               </Text>
               <Input
                 placeholder="Descripción"
-                {...register('description', {
+                {...register("description", {
                   pattern: /[A-Za-z]{3}/,
                   required: true,
                 })}
               />
-              {errors.description?.type === 'pattern' && (
+              {errors.description?.type === "pattern" && (
                 <p>Ingrese la descripción solo con letras</p>
               )}
-              {errors.description?.type === 'required' && (
+              {errors.description?.type === "required" && (
                 <p>La descripción es requerido</p>
               )}
             </FormControl>
@@ -174,7 +174,7 @@ function AddPet({ owners }) {
                 type="reset"
                 leftIcon={<MdOutlineClose />}
                 onClick={() => {
-                  router.push('/pets');
+                  router.push("/pets");
                 }}
                 mt={4}
               >

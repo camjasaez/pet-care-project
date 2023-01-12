@@ -10,6 +10,9 @@ import {
   Button,
   ButtonGroup,
   Spacer,
+  Box,
+  TableContainer,
+  Flex,
 } from "@chakra-ui/react";
 import { createPetOwner, getPetOwner } from "../../utils/getPetOwnerData";
 import { useForm } from "react-hook-form";
@@ -39,7 +42,75 @@ function Petowner({}) {
   };
 
   return (
-    <Card direction={{ base: "column" }}>
+    <Box>
+      <Stack  alignItems="center" justifyContent="center">
+      <Flex  p= "30px" bg="linear-gradient(90deg, rgba(1,3,3,0.3253676470588235) 100%, rgba(79,209,197,1) 100%, rgba(79,209,197,1) 100%)">
+    
+        <TableContainer>
+          <Text fontSize="3xl" fontWeight="bold" mb="1rem">
+            Agregar Dueño
+          </Text>
+          
+          <Box bg="white" h="5xp" w="100%" />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <FormControl id="rut">
+                <FormLabel>Rut</FormLabel>
+                <Input placeholder="Rut" {...register("rut")} />
+              </FormControl>
+              <FormControl id="name">
+                <Text fontWeight="bold" mb="1rem">
+                  Nombre
+                </Text>
+                <Input placeholder="Nombre" {...register("name")} />
+              </FormControl>
+              <FormControl id="lastName">
+                <FormLabel>Apellido</FormLabel>
+                <Input placeholder="Apellido" {...register("lastName")} />
+              </FormControl>
+
+              <Stack spacing={2} direction="row">
+                <FormControl id="number">
+                  <FormLabel>Telefono</FormLabel>
+                  <Input
+                    placeholder="+569 + Su numero"
+                    {...register("number")}
+                  />
+                </FormControl>
+                <FormControl id="email">
+                  <FormLabel>Email</FormLabel>
+                  <Input placeholder="Email" {...register("email")} />
+                </FormControl>
+              </Stack>
+              <Stack spacing={2} direction="row">
+                <FormControl id="address">
+                  <FormLabel>Direccion</FormLabel>
+                  <Input placeholder="Direccion" {...register("address")} />
+                </FormControl>
+              </Stack>
+              <Stack spacing={2} direction="row">
+
+            <ButtonGroup spacing={4} mt="15px">
+              
+              <Button colorScheme="teal" type="submit" isLoading={isSubmitting}>
+                Guardar Dueño
+              </Button>
+              <Button onClick={() => router.push("/petowners")}>Atras</Button>
+            </ButtonGroup>
+            </Stack>
+            </form>
+
+            
+        </TableContainer>
+        </Flex>
+
+      </Stack>
+
+    </Box>
+  );
+}
+
+{
+  /* <Card direction={{ base: "column" }}>
       <CardHeader>
         <Text>Pagina de Petowner</Text>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -86,8 +157,7 @@ function Petowner({}) {
           </CardBody>
         </form>
       </CardHeader>
-    </Card>
-  );
+    </Card> */
 }
 
 export async function getServerSideProps() {
