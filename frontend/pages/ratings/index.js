@@ -19,6 +19,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   Container,
+  Box,
 } from '@chakra-ui/react';
 import { getCares } from '../../utils/getCaresData';
 import { useAuth } from '../../components/Auth';
@@ -26,20 +27,26 @@ import { useEffect } from 'react';
 
 function Rating({ cares }) {
   const { checkAuth } = useAuth();
-  console.log(cares); 
-    
-    
+  console.log(cares);
+
   useEffect(() => {
     checkAuth();
   }, []);
 
   return (
     <Container>
-      <Card size="sm">
+      <Text fontSize="3xl" fontWeight="bold" mb="1rem">
+        Ratings
+      </Text>
+      <Box bg="white" h="5px" w="100%" />
+      <Card size="sm" bg="#12595e">
         <CardBody>
-          <Text>Pagina de Ratings</Text>
           <TableContainer>
-            <Table variant="simple" size="sm">
+            <Table
+              variant="simple"
+              size="sm"
+              bg="linear-gradient(90deg, rgba(1,3,3,0.3253676470588235) 100%, rgba(79,209,197,1) 100%, rgba(79,209,197,1) 100%)"
+            >
               <Thead>
                 <Tr>
                   <Th>Nombre mascota</Th>

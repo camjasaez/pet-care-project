@@ -17,6 +17,7 @@ import {
 import { getPetOwner } from '../../utils/getPetOwnerData';
 import { deletePetOwner } from '../../utils/getPetOwnerData';
 import { useAuth } from '../../components/Auth';
+import { useEffect } from 'react';
 
 function PetOwner({ petowner }) {
   const { checkAuth } = useAuth();
@@ -91,7 +92,6 @@ function PetOwner({ petowner }) {
 
 export async function getServerSideProps() {
   const data = await getPetOwner();
-  console.log(data);
   if (!data) {
     return {
       notFound: true,
