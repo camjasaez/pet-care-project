@@ -39,12 +39,14 @@ function Takecare({ data: takecare }) {
   const router = useRouter();
 
   const UserLayout = (
-    <Card>
+    <Card bg="#12595e">
       <CardBody>
-        <Text>Pagina de mis cuidados</Text>
         <Flex alignItems="center" justifyContent="center">
           <TableContainer>
-            <Table variant="simple">
+            <Table
+              variant="simple"
+              bg="linear-gradient(90deg, rgba(1,3,3,0.3253676470588235) 100%, rgba(79,209,197,1) 100%, rgba(79,209,197,1) 100%)"
+            >
               <Thead>
                 <Tr>
                   <Th>Nombre Cuidador</Th>
@@ -73,7 +75,7 @@ function Takecare({ data: takecare }) {
                           </Td>
                           <Td>
                             <DetailsCaresButton
-                              care={care}
+                              cares={care}
                               petId={care.pet._id}
                             />
                           </Td>
@@ -146,7 +148,7 @@ function Takecare({ data: takecare }) {
       <Text fontSize="3xl" fontWeight="bold" mb="1rem">
         Cuidados
       </Text>
-      <Box bg="white" h="5px" w="1000px" />
+      <Box bg="white" h="5px" w="100%" />
       {user?.type === 'admin' ? AdminLayout : UserLayout}
     </Container>
   );
