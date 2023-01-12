@@ -20,8 +20,27 @@ export async function getPetOwner() {
 export async function deletePetOwner(id) {
   try {
     const res = await fetch(`${API_URL}/petowner/${id}`, {
-      method: 'DELETE',
+      method: 'GET',
     });
+    if (res.ok) {
+      const responseData = await res.json();
+      const { data } = responseData;
+      const petsToEliminate = data?.pets.map((pet) => pet);
+
+      await fetch(`${API_URL}/petowner/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (petsToEliminate.length > 0) {
+        for (const element of petsToEliminate) {
+          await fetch(`${API_URL}/pet/${element._id}`, {
+            method: 'DELETE',
+          });
+        }
+      }
+
+      return;
+    }
   } catch (error) {
     console.error(error);
   }

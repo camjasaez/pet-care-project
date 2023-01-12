@@ -92,7 +92,6 @@ function PetOwner({ petowner }) {
 
 export async function getServerSideProps() {
   const data = await getPetOwner();
-  console.log(data);
   if (!data) {
     return {
       notFound: true,
